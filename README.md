@@ -133,7 +133,7 @@ _(License section is currently empty)_
 |    :---:     |     :---:     |     :---:       |
 | member1      | dchoy3@mail.sfsu.edu              |  whyyux               |
 | member2      |        jrichards7@sfsu.edu       |        Arodoid         |
-| member3      |               |                 |
+| member3      | ang@sfsu.edu  |    ang643       |
 | member4      |               |                 |
 | member5      |               |                 |
 | member6      |               |                 |
