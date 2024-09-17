@@ -140,7 +140,7 @@ _(License section is currently empty)_
 | Student Name | Student Email | GitHub Username |
 |    :---:     |     :---:     |     :---:       |
 | member1      | dchoy3@mail.sfsu.edu              |  whyyux               |
-| member2      |        jrichards7@sfsu.edu       |        Arodoid         |
+| Jack Richards      |        jrichards7@sfsu.edu       |        Arodoid         |
 | Austin Ng    | ang@sfsu.edu  |    ang643       |
 | member4      |               |                 |
 | member5      |               |                 |
