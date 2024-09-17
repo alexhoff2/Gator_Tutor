@@ -50,6 +50,14 @@ sudo apt-get install mysql-server
 # On macOS with Homebrew
 brew services start mysql
 
+# On Windows:
+    Download MySQL: Go to MySQL Downloads and download the MySQL Installer for Windows.
+    Install MySQL:
+        Choose Server Only during installation.
+        When configuring, use the default settings (leave the port as 3306).
+        Set up a root password and remember it (you'll need it later).
+    Start MySQL Server: After installation, you can start the MySQL server from the MySQL Workbench or MySQL Command Line Client.
+
 # On Ubuntu
 sudo service mysql start
 
