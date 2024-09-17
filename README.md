@@ -55,7 +55,7 @@ brew services start mysql
     Install MySQL:
         Choose Server Only during installation.
         When configuring, use the default settings (leave the port as 3306).
-        Set up a root password and remember it (you'll need it later).
+        Set up a root password and remember it (youll need it later).
     Start MySQL Server: After installation, you can start the MySQL server from the MySQL Workbench or MySQL Command Line Client.
 
 # On Ubuntu
