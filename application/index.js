@@ -1,22 +1,50 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
 const path = require('path');
-const app = express();
-const port = 3000;
+const tutorRoutes = require('./routes/tutors');
 
-// Serve static files (CSS, JS, images) from the 'public' directory
+const app = express();
+
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route for the homepage
+// MySQL database connection
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',           // MySQL username
+    password: '1234',       // Your MySQL password
+    database: 'tutoring_app'
+});
+
+db.connect(err => {
+    if (err) {
+        console.error('Database connection error: ', err);
+        return;
+    }
+    console.log('Connected to the database!');
+});
+
+// Middleware to make `db` accessible in all routes
+app.use((req, res, next) => {
+    req.db = db;
+    next();
+});
+
+// Routes
+app.use('/tutors', tutorRoutes);
+
+// Serve the index.html file for the root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Route for the About page
-app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'about.html'));
-});
-
-// Start the server
+// Start server
+const port = 3000;
 app.listen(port, '0.0.0.0', () => {
-  console.log(`App listening at http://localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}`);
 });
