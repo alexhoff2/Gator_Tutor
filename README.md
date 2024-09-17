@@ -14,7 +14,7 @@
 **Team Name:** Team 6 - CSC 648/848 Software Engineering, Fall 2024  
 **Project:** SFSU Tutoring Service Web Application  
 **Class CEO:** Prof. Dragutin Petkovic  
-**Class CTO:** Anthony John Souza  
+**Class CTO:** Anthony John Souza
 
 #### Team Members:
 - **Alex Hoff (Team Lead):** Leading the team and organizing project milestones.
