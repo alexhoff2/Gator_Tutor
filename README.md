@@ -18,7 +18,7 @@
 
 #### Team Members:
 - **Alex Hoff (Team Lead):** Leading the team and organizing project milestones.
-- **Austin White (Backend Lead):** Responsible for server-side logic and database management.
+- **Austin Ng (Backend Lead):** Responsible for server-side logic and database management.
 - **Jack Richards (?):** 
 - **Dylan Lee (GitHub Master):** Organizing and maintaining GitHub repository, overseeing version control.
 - **Dalan Moore (?):**
