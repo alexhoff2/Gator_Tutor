@@ -139,10 +139,10 @@ _(License section is currently empty)_
 
 | Student Name | Student Email | GitHub Username |
 |    :---:     |     :---:     |     :---:       |
-| member1      | dchoy3@mail.sfsu.edu              |  whyyux               |
+| Dalan Choy      | dchoy3@mail.sfsu.edu              |  whyyux               |
 | Jack Richards      |        jrichards7@sfsu.edu       |        Arodoid         |
 | Austin Ng    | ang@sfsu.edu  |    ang643       |
-| member4      |               |                 |
+| Alexander Hoff     |   ahoff2@sfsu.mail.edu            |      alexhoff2           |
 | member5      |               |                 |
 | member6      |               |                 |
 
