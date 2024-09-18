@@ -144,5 +144,3 @@ _(License section is currently empty)_
 | Austin Ng    | ang@sfsu.edu  |    ang643       |
 | Alexander Hoff     |   ahoff2@sfsu.mail.edu            |      alexhoff2           |
 | Dylan Faulder     |   dfaulder@mail.sfsu.edu            |   YinoCS              |
-| member6      |               |                 |
-
