@@ -143,6 +143,6 @@ _(License section is currently empty)_
 | Jack Richards      |        jrichards7@sfsu.edu       |        Arodoid         |
 | Austin Ng    | ang@sfsu.edu  |    ang643       |
 | Alexander Hoff     |   ahoff2@sfsu.mail.edu            |      alexhoff2           |
-| member5      |               |                 |
+| Dylan Faulder     |   dfaulder@mail.sfsu.edu            |   YinoCS              |
 | member6      |               |                 |
 
