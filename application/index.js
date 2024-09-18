@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const path = require('path');
 const tutorRoutes = require('./routes/tutors');
 
@@ -15,10 +16,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // MySQL database connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',           // MySQL username
-    password: '1234',       // Your MySQL password
-    database: 'tutoring_app'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 });
 
 db.connect(err => {
