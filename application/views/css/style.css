@@ -1,0 +1,142 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f9;
+    color: #333;
+    padding: 0;
+    margin: 0;
+}
+
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 1rem;
+}
+
+.navbar-left, .navbar-right {
+    display: flex;
+    list-style-type: none;
+}
+
+.navbar-left li, .navbar-right li {
+    margin-right: 20px;
+}
+
+.navbar-left li a, .navbar-right li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+}
+
+.navbar-left li a:hover, .navbar-right li a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+/* Categories dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    padding: 0.5rem 0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Search bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.search-container select, .search-container input {
+    margin-right: 10px;
+    padding: 0.5rem;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.search-container button {
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #45a049;
+}
+
+/* Main content */
+main {
+    padding: 2rem;
+    text-align: center;
+}
+
+#hero {
+    background-color: #333;
+    color: white;
+    padding: 4rem 2rem;
+}
+
+#hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+#hero p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+#features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+}
+
+.feature-card {
+    text-align: center;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 30%;
+}
+
+/* Footer styling */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

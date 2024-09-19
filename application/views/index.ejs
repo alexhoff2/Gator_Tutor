@@ -1,0 +1,44 @@
+<!-- views/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Team Project</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- Include the header partial -->
+    <%- include('partials/header') %>
+
+    <main>
+        <section id="hero">
+            <h1>Welcome to Our Tutoring Platform</h1>
+            <p>Your go-to platform for finding and offering tutoring services at SFSU.</p>
+            <a href="#">Get Started</a>
+        </section>
+
+        <section id="features">
+            <h2>Features</h2>
+            <div class="feature-card">
+                <h3>Browse Tutors</h3>
+                <p>Find the perfect tutor for your needs.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Contact Tutors</h3>
+                <p>Message tutors directly through the platform.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Create a Profile</h3>
+                <p>Offer your tutoring services to SFSU students.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Include the footer partial -->
+    <%- include('partials/footer') %>
+
+</body>
+</html>

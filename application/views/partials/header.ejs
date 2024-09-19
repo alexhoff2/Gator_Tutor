@@ -1,0 +1,39 @@
+<header>
+    <nav class="navbar">
+        <ul class="navbar-left">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            
+            <!-- Categories Dropdown -->
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Categories</a>
+                <div class="dropdown-content">
+                    <a href="#">Math</a>
+                    <a href="#">Science</a>
+                    <a href="#">Languages</a>
+                    <!-- You can dynamically generate these from the database later -->
+                </div>
+            </li>
+        </ul>
+
+        <!-- Search Bar with Category Filter -->
+        <div class="search-container">
+            <form action="/search" method="GET">
+                <select name="category">
+                    <option value="all">All</option>
+                    <option value="math">Math</option>
+                    <option value="science">Science</option>
+                    <option value="languages">Languages</option>
+                    <!-- Add more categories as needed, or fetch from DB -->
+                </select>
+                <input type="text" placeholder="Search..." name="search">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <ul class="navbar-right">
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Register</a></li>
+        </ul>
+    </nav>
+</header>
