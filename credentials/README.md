@@ -7,12 +7,12 @@ This folder is designed to securely store all credentials required for logging i
 Below is a list of items that must be included. Missing or incorrect information may result in points being deducted from milestone submissions.
 
 ### 1. Server Information
-- **Server URL or IP:** `<your_server_ip_or_url>`
-- **SSH Username:** `<your_ssh_username>`
-- **SSH Key:** Use the `ssh_key.pem` located in this `credentials` folder.
+- **Server URL or IP:** `18.209.24.122`
+- **SSH Username:** `ec2-user`
+- **SSH Key:** Use the `vs-key-pair-1-2.pem` located in this `credentials` folder.
 - **SSH Connection Command:**
     ```bash
-    ssh -i credentials/ssh_key.pem <your_ssh_username>@<your_server_ip_or_url>
+    ssh -i credentials/ssh_key.pem ec2-user@18.209.24.122
     ```
 
 ### 2. Database Information
@@ -25,11 +25,11 @@ Below is a list of items that must be included. Missing or incorrect information
 ### 3. Usage Instructions
 
 #### SSH Access:
-1. Ensure the current working `ssh_key.pem` is stored in the `credentials/` folder.
+1. Ensure the current working `vs-key-pair-1-2.pem` is stored in the `credentials/` folder.
 2. Use the SSH command listed above to connect to the server.
-3. Ensure the private key (`ssh_key.pem`) has the correct permissions by running:
+3. Ensure the private key (`vs-key-pair-1-2.pem`) has the correct permissions by running:
     ```bash
-    chmod 400 credentials/ssh_key.pem
+    chmod 400 credentials/vs-key-pair-1-2.pem
     ```
 
 #### MySQL Database Access (via CLI):
@@ -50,5 +50,5 @@ To connect using MySQL Workbench, create a new connection using the following de
 Ensure that the connection is set up with the correct SSH tunneling if we're using a local or remote database.
 
 ### Notes:
-- Do **not** store sensitive information like SSH private keys in this `README.md` file. Keep it in separate files as needed (e.g., `ssh_key.pem`).
+- Do **not** store sensitive information like SSH private keys in this `README.md` file. Keep it in separate files as needed (e.g., `vs-key-pair-1-2.pem`).
 - Update this information regularly throughout the semester to avoid missing credentials during grading or troubleshooting.
