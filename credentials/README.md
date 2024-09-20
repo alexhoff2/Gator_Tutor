@@ -1,24 +1,54 @@
 # Credentials Folder
 
-## The purpose of this folder is to store all credentials needed to log into your server and databases. This is important for many reasons. But the two most important reasons is
-    1. Grading , servers and databases will be logged into to check code and functionality of application. Not changes will be unless directed and coordinated with the team.
-    2. Help. If a class TA or class CTO needs to help a team with an issue, this folder will help facilitate this giving the TA or CTO all needed info AND instructions for logging into your team's server. 
+## Purpose
+This folder is designed to securely store all credentials required for logging into the server and databases associated with the project. This information is essential for grading purposes and for class TAs or the CTO to assist with technical issues.
 
+## Items Required
+Below is a list of items that must be included. Missing or incorrect information may result in points being deducted from milestone submissions.
 
-# Below is a list of items required. Missing items will causes points to be deducted from multiple milestone submissions.
+### 1. Server Information
+- **Server URL or IP:** `18.209.24.122`
+- **SSH Username:** `ec2-user`
+- **SSH Key:** Use the `vs-key-pair-1-2.pem` located in this `credentials` folder.
+- **SSH Connection Command:**
+    ```bash
+    ssh -i credentials/ssh_key.pem ec2-user@18.209.24.122
+    ```
 
-1. Server URL or IP
-2. SSH username
-3. SSH password or key.
-    <br> If a ssh key is used please upload the key to the credentials folder.
-4. Database URL or IP and port used.
-    <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
-5. Database username
-6. Database password
-7. Database name (basically the name that contains all your tables)
-8. Instructions on how to use the above information.
+### 2. Database Information
+- **Database URL/IP:** `localhost` or `<your_database_ip>` (if remote)
+- **Database Port:** `3306` (default) or `<your_custom_port>` if different
+- **Database Username:** `<your_db_username>`
+- **Database Password:** `<your_db_password>`
+- **Database Name:** `<your_database_name>`
 
-# Most important things to Remember
-## These values need to kept update to date throughout the semester. <br>
-## <strong>Failure to do so will result it points be deducted from milestone submissions.</strong><br>
-## You may store the most of the above in this README.md file. DO NOT Store the SSH key or any keys in this README.md file.
+### 3. Usage Instructions
+
+#### SSH Access:
+1. Ensure the current working `vs-key-pair-1-2.pem` is stored in the `credentials/` folder.
+2. Use the SSH command listed above to connect to the server.
+3. Ensure the private key (`vs-key-pair-1-2.pem`) has the correct permissions by running:
+    ```bash
+    chmod 400 credentials/vs-key-pair-1-2.pem
+    ```
+
+#### MySQL Database Access (via CLI):
+1. To access the MySQL database via the command line, use the following command:
+    ```bash
+    mysql -h <your_database_ip> -P <your_database_port> -u <your_db_username> -p
+    ```
+2. Enter the database password when prompted.
+
+#### MySQL Workbench Setup:
+To connect using MySQL Workbench, create a new connection using the following details:
+- **Hostname:** `<your_database_ip>` or `127.0.0.1` (if local)
+- **Port:** `3306` (or `<your_custom_port>`)
+- **Username:** `<your_db_username>`
+- **Password:** `<your_db_password>`
+- **Database Name:** `<your_database_name>`
+
+Ensure that the connection is set up with the correct SSH tunneling if we're using a local or remote database.
+
+### Notes:
+- Do **not** store sensitive information like SSH private keys in this `README.md` file. Keep it in separate files as needed (e.g., `vs-key-pair-1-2.pem`).
+- Update this information regularly throughout the semester to avoid missing credentials during grading or troubleshooting.

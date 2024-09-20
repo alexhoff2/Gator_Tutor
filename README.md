@@ -14,11 +14,11 @@
 **Team Name:** Team 6 - CSC 648/848 Software Engineering, Fall 2024  
 **Project:** SFSU Tutoring Service Web Application  
 **Class CEO:** Prof. Dragutin Petkovic  
-**Class CTO:** Anthony John Souza  
+**Class CTO:** Anthony John Souza
 
 #### Team Members:
 - **Alex Hoff (Team Lead):** Leading the team and organizing project milestones.
-- **Austin White (Backend Lead):** Responsible for server-side logic and database management.
+- **Austin Ng (Backend Lead):** Responsible for server-side logic and database management.
 - **Jack Richards (?):** 
 - **Dylan Lee (GitHub Master):** Organizing and maintaining GitHub repository, overseeing version control.
 - **Dalan Moore (?):**
@@ -49,6 +49,14 @@ sudo apt-get install mysql-server
 # 4. Start the MySQL service
 # On macOS with Homebrew
 brew services start mysql
+
+# On Windows:
+    Download MySQL: Go to MySQL Downloads and download the MySQL Installer for Windows.
+    Install MySQL:
+        Choose Server Only during installation.
+        When configuring, use the default settings (leave the port as 3306).
+        Set up a root password and remember it (youll need it later).
+    Start MySQL Server: After installation, you can start the MySQL server from the MySQL Workbench or MySQL Command Line Client.
 
 # On Ubuntu
 sudo service mysql start
@@ -131,10 +139,8 @@ _(License section is currently empty)_
 
 | Student Name | Student Email | GitHub Username |
 |    :---:     |     :---:     |     :---:       |
-| member1      | dchoy3@mail.sfsu.edu              |  whyyux               |
-| member2      |        jrichards7@sfsu.edu       |        Arodoid         |
+| Dalan Choy      | dchoy3@mail.sfsu.edu              |  whyyux               |
+| Jack Richards      |        jrichards7@sfsu.edu       |        Arodoid         |
 | Austin Ng    | ang@sfsu.edu  |    ang643       |
-| member4      |               |                 |
-| member5      |               |                 |
-| member6      |               |                 |
-
+| Alexander Hoff     |   ahoff2@sfsu.mail.edu            |      alexhoff2           |
+| Dylan Faulder     |   dfaulder@mail.sfsu.edu            |   YinoCS              |
