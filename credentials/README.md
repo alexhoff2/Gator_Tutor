@@ -12,7 +12,7 @@ Below is a list of items that must be included. Missing or incorrect information
 - **SSH Key:** Use the `vs-key-pair-1-2.pem` located in this `credentials` folder.
 - **SSH Connection Command:**
     ```bash
-    ssh -i credentials/ssh_key.pem ec2-user@18.209.24.122
+    ssh -i credentials/vs-key-pair-1-2.pem ec2-user@18.209.24.122
     ```
 
 ### 2. Database Information
