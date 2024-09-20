@@ -4,13 +4,10 @@ const express = require('express');
 const router = express.Router();
 const usersController = require('../controllers/usersController');
 
-// Route for user registration
+// Route for rendering registration page
+router.get('/register', usersController.renderRegisterPage);
+
+// Route for handling user registration form submission
 router.post('/register', usersController.registerUser);
-
-// Route for user login
-router.post('/login', usersController.loginUser);
-
-// Route for retrieving user profile
-router.get('/:id', usersController.getUserProfile);
 
 module.exports = router;
