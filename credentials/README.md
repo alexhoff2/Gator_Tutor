@@ -7,7 +7,7 @@ This folder is designed to securely store all credentials required for logging i
 Below is a list of items that must be included. Missing or incorrect information may result in points being deducted from milestone submissions.
 
 ### 1. Server Information
-- **Server URL or IP:** `18.209.24.122`
+- **Server URL or IP:** `http://18.209.24.122:3000`
 - **SSH Username:** `ec2-user`
 - **SSH Key:** Use the `vs-key-pair-1-2.pem` located in this `credentials` folder.
 - **SSH Connection Command:**
