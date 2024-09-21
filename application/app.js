@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Fetch subjects for dropdown in every request
-app.use(subjectsController.fetchAllSubjects);
+// app.use(subjectsController.fetchAllSubjects);
 
 // Serve static files like CSS and JS
 app.use(express.static(path.join(__dirname, 'views')));
@@ -32,7 +32,7 @@ const teamMembers = {
   'alex-hoff': {
       name: 'Alex Hoff',
       title: 'Team Lead',
-      img: '/images/blank-pfp.jpg',
+      img: '/images/Alexander-Hoff.png',
       bio: 'Alex oversees the entire project, coordinates between team members, ensures everyone is aligned on the project goals, and makes key decisions related to progress and direction.'
   },
   'austin-ng': {
@@ -50,13 +50,13 @@ const teamMembers = {
   'dylan-lee': {
       name: 'Dylan Lee',
       title: 'GitHub Master',
-      img: '/images/Dylan Lee.jpg',
+      img: '/images/Dylan-Lee.png',
       bio: 'Manages the version control system (GitHub), ensuring proper collaboration between team members, handling code merges, pull requests, and resolving any conflicts that arise in the codebase.'
   },
   'dalan-moore': {
       name: 'Dalan Moore',
       title: 'Front-End',
-      img: '/images/blank-pfp.jpg',
+      img: '/images/Dalan-Moore.png',
       bio: 'Dalan works on the front-end team, focusing on clean design and smooth interactions.'
   }
 };

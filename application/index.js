@@ -5,10 +5,10 @@ const db = require('./config/db'); // Import the centralized database connection
 require('dotenv').config(); // Load environment variables
 
 // Middleware to make `db` accessible in all routes
-app.use((req, res, next) => {
-    req.db = db;
-    next();
-});
+// app.use((req, res, next) => {
+//     req.db = db;
+//     next();
+// });
 
 // Start the server
 const port = process.env.PORT || 3000;
