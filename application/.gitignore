@@ -2,5 +2,6 @@
 /credentials/
 /LICENSE
 /README.md
-application/node_modules/
+/application/node_modules/
+/node_modules/
 .env
