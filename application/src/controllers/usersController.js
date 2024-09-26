@@ -1,7 +1,7 @@
 // controlers/usersController.js
 
-const usersModel = require('../models/usersModel');
-const subjectsModel = require('../models/subjectsModel');
+const usersModel = require('../../src/models/usersModel');
+const subjectsModel = require('../../src/models/subjectsModel');
 
 // Render the registration page and load subjects dynamically
 exports.renderRegisterPage = (req, res) => {

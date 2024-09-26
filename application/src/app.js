@@ -2,11 +2,11 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const usersRoutes = require('./routes/usersRoute');
-const usersController = require('./controllers/usersController');
-const subjectsController = require('./controllers/subjectsController');
 const path = require('path');
 require('dotenv').config();
+
+const usersRoutes = require('./routes/usersRoute');
+const subjectsController = require('./controllers/subjectsController');
 
 const app = express(); // Create the express app
 
@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(subjectsController.fetchAllSubjects);
 
 // Serve static files like CSS and JS
-app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', usersRoutes);
@@ -61,16 +61,15 @@ const teamMembers = {
   }
 };
 
-// Serve home page
-app.get('/', (req, res) => {``
+// Routes
+app.get('/', (req, res) => {
   res.render('index'); // Render the index.ejs file
 });
-// Serve about page
+
 app.get('/about', (req, res) => {
   res.render('about'); // Render the about.ejs file
 });
 
-// Individual Team Member Routes
 app.get('/:memberId', (req, res) => {
   const memberId = req.params.memberId.toLowerCase();
   const member = teamMembers[memberId];
@@ -82,4 +81,10 @@ app.get('/:memberId', (req, res) => {
   }
 });
 
-module.exports = app; // Export the app so it can be used in index.js
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+module.exports = app; // Export the app so it can be used in index.js.
