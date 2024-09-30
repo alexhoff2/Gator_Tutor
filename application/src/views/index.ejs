@@ -1,320 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GatorTutor</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/tailwind.css">
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <!-- Include custom CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/flowbite/dist/flowbite.js"></script>
-    <title>GatorTutor</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js"
+      defer
+    ></script>
+  </head>
 
-    
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .navbar-item {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-item::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 50%;
-            background-color: #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-item:hover::after {
-            width: 100%;
-            left: 0;
-        }
-
-        .btn-primary {
-            background-color: #667eea;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #5a67d8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-        }
-
-        .bg-animation {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            background: radial-gradient(circle, rgba(0, 0, 0, 0.5) 10%, rgba(0, 0, 0, 0) 70%);
-            animation: animateBackground 20s linear infinite;
-        }
-
-        .bg-animation::before,
-        .bg-animation::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.6);
-            animation: circulate 4s linear infinite;
-        }
-
-        .bg-animation::before {
-            top: 20%;
-            left: 30%;
-        }
-
-        .bg-animation::after {
-            top: 50%;
-            left: 70%;
-        }
-
-        @keyframes animateBackground {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        @keyframes circulate {
-            0% {
-                transform: translateX(0) translateY(0) scale(1);
-            }
-
-            25% {
-                transform: translateX(50px) translateY(-50px) scale(1.2);
-            }
-
-            50% {
-                transform: translateX(100px) translateY(0) scale(1);
-            }
-
-            75% {
-                transform: translateX(50px) translateY(50px) scale(1.2);
-            }
-
-            100% {
-                transform: translateX(0) translateY(0) scale(1);
-            }
-        }
-
-        .section-heading {
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-heading::after {
-            content: '';
-            position: absolute;
-            width: 50%;
-            height: 3px;
-            bottom: -10px;
-            left: 25%;
-            background-color: #667eea;
-        }
-
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .skill-bar {
-            height: 8px;
-            background-color: #ddd;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .skill-progress {
-            height: 100%;
-            width: 0;
-            background-color: #6B46C1;
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
-    <header x-data="{ isOpen: false }" class="bg-white shadow-md fixed w-full z-50">
-        <nav class="container mx-auto px-6 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <a href="#" class="text-gray-800 text-xl font-bold md:text-2xl hover:text-gray-700">
-                        <img src="./src/views/images/logo.png" class="h-8 w-8 mr-2 inline-block">
-                        GatorTutor
-                    </a>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#impact" class="navbar-item text-gray-800 hover:text-indigo-600">Impact</a>
-                    <a href="#tutors" class="navbar-item text-gray-800 hover:text-indigo-600">Tutors</a>
-                    <a href="#about-us" class="navbar-item text-gray-800 hover:text-indigo-600">About Us</a>
-                    <a href="#sign-in" class="btn-primary text-white px-4 py-2 rounded-md">Sign In</a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button @click="isOpen = !isOpen" class="outline-none mobile-menu-button">
-                        <!-- (Toggle icons remain the same) -->
-                    </button>
-                </div>
-            </div>
-            <div x-show="isOpen" class="md:hidden mt-3">
-                <a href="#impact" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Impact</a>
-                <a href="#private-tutoring" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Private Tutoring</a>
-                <a href="#tutors" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Tutors</a>
-                <a href="#about-us" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">About Us</a>
-                <a href="#contact-us" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Contact Us</a>
-                <a href="#sign-in" class="block py-2 px-4 text-sm bg-indigo-600 text-white rounded mt-2">Sign In</a>
-            </div>
-        </nav>
-    </header>
+  <body class="bg-gray-100">
+    <%- include('partials/header') %>
     <main class="pt-16">
-
-        <!-- Impact Section -->
-        <section id="impact" class="gradient-bg text-white min-h-screen flex items-center relative overflow-hidden">
-            <div class="container mx-auto px-6 py-20 text-center relative z-10">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">Welcome to GatorTutor</h1>
-                <p class="text-xl md:text-2xl mb-8">Making a positive impact through personalized tutoring.</p>
-                <div id="typing-text" class="text-lg md:text-xl mb-8 h-8 overflow-hidden">
-                    Empowering Students | Expert Tutors | Academic Excellence
-                </div>
-                <a href="#sign-in" class="btn-primary text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-indigo-700 transition duration-300">Sign In</a>
-            </div>
-            <div class="bg-animation"></div>
-        </section>
-
-<!-- About Us Section -->
-<section id="about-us" class="py-20 bg-white">
-    <div class="container mx-auto px-6">
-        <h2 class="section-heading text-3xl font-bold text-center mb-12">About Us</h2>
-        <!-- Team Members Section -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            <!-- Team Member 1: Alex Hoff -->
-            <a href="/alex-hoff" class="card bg-white rounded-lg overflow-hidden shadow-lg text-center cursor-pointer">
-                <img src="/src/views/views/images/Alexander-Hoff.png" alt="Alex Hoff" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">Alex Hoff</h3>
-                    <p class="text-gray-600">Team Lead</p>
-                </div>
-            </a>
-
-            <!-- Team Member 2: Austin Ng -->
-            <a href="/austin-ng" class="card bg-white rounded-lg overflow-hidden shadow-lg text-center cursor-pointer">
-                <img src="/src/views/images/Austin-Ng.png" alt="Austin Ng" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">Austin Ng</h3>
-                    <p class="text-gray-600">Backend Lead</p>
-                </div>
-            </a>
-
-            <!-- Team Member 3: Jack Richards -->
-            <a href="/jack-richards" class="card bg-white rounded-lg overflow-hidden shadow-lg text-center cursor-pointer">
-                <img src="/src/views/images/Jack-Richards.png" alt="Jack Richards" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">Jack Richards</h3>
-                    <p class="text-gray-600">Front-End</p>
-                </div>
-            </a>
-
-            <!-- Team Member 4: Dylan Lee -->
-            <a href="/dylan-lee" class="card bg-white rounded-lg overflow-hidden shadow-lg text-center cursor-pointer">
-                <img src="/src/views/images/Dylan-Lee.png" alt="Dylan Lee" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">Dylan Lee</h3>
-                    <p class="text-gray-600">GitHub Master</p>
-                </div>
-            </a>
-
-            <!-- Team Member 5: Dalan Moore -->
-            <a href="/dalan-moore" class="card bg-white rounded-lg overflow-hidden shadow-lg text-center cursor-pointer">
-                <img src="/src/views/images/Dalan-Moore.png" alt="Dalan Moore" class="w-full h-64 object-cover">
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">Dalan Moore</h3>
-                    <p class="text-gray-600">Front-End</p>
-                </div>
-            </a>
+      <!-- Impact Section -->
+      <section
+        id="impact"
+        class="relative flex items-center min-h-screen overflow-hidden text-white gradient-bg"
+      >
+        <div class="container relative z-10 px-6 py-20 mx-auto text-center">
+          <h1 class="mb-4 text-4xl font-bold md:text-6xl">
+            Welcome to GatorTutor
+          </h1>
+          <p class="mb-8 text-xl md:text-2xl">
+            Making a positive impact through personalized tutoring.
+          </p>
+          <div
+            id="typing-text"
+            class="h-8 mb-8 overflow-hidden text-lg md:text-xl"
+          >
+            Empowering Students | Expert Tutors | Academic Excellence
+          </div>
+          <a
+            href="#sign-in"
+            class="px-8 py-3 text-lg font-semibold text-white transition duration-300 rounded-full btn-primary hover:bg-indigo-700"
+            >Sign In</a
+          >
         </div>
-    </div>
-    </div>
-</section>
+      </section>
 
-
-
-
-        <!-- Contact Us Section -->
-        <section id="contact-us" class="bg-gray-100 py-20">
-            <div class="container mx-auto px-6">
-                <h2 class="section-heading text-3xl font-bold text-center mb-12">Contact Us</h2>
-                <!-- (Include your existing contact form or update as needed) -->
-                <!-- ... -->
-            </div>
-        </section>
-
-        <!-- Sign In Section -->
-        <section id="sign-in" class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="section-heading text-3xl font-bold text-center mb-12">Sign In</h2>
-                <!-- (Include a sign-in form or link to a sign-in page) -->
-                <!-- ... -->
-            </div>
-        </section>
-
-        <% include('partials/footer') %>
+      <%- include('partials/footer') %>
     </main>
 
-    <!-- Scripts -->
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-            // Animate skill bars on scroll
-    function animateSkillBars() {
-        const skillBars = document.querySelectorAll('.skill-progress');
-        skillBars.forEach(bar => {
-            const barTop = bar.getBoundingClientRect().top;
-            if (barTop < window.innerHeight) {
-                bar.style.width = bar.parentElement.getAttribute('data-progress') + '%';
-            }
-        });
-    }
-    window.addEventListener('scroll', animateSkillBars);
-    animateSkillBars(); // Initial call
-    </script>
-</body>
-
+    <%- include('partials/scripts') %>
+  </body>
 </html>
