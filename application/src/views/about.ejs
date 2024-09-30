@@ -2,27 +2,51 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Us - Team Project</title>
-    <link rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/css/style.css"></noscript>
-</head>
-<body>
-
+    <link
+      rel="preload"
+      href="/css/style.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/css/style.css" /></noscript>
+  </head>
+  <body>
     <!-- Include the header partial -->
     <%- include('partials/header') %>
 
     <main>
-        <section>
-            <h1>About Us</h1>
-            <p>We are a team of students building a tutoring platform for SFSU students.</p>
-        </section>
+      <!-- /path/to/your-file.html -->
+      <!-- About Us Section -->
+      <section id="about-us" class="py-20 bg-white">
+        <div class="container px-6 mx-auto">
+          <h2 class="mb-12 text-3xl font-bold text-center section-heading">
+            About Us
+          </h2>
+          <div
+            class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
+          >
+            <%- include('partials/team-member', { link: '/alex-hoff', image:
+            '/images/Alexander-Hoff.png', name: 'Alex Hoff', role: 'Team Lead'
+            }) %> <%- include('partials/team-member', { link: '/austin-ng',
+            image: '/images/Austin-Ng.png', name: 'Austin Ng', role: 'Backend
+            Lead' }) %> <%- include('partials/team-member', { link:
+            '/jack-richards', image: '/images/Jack-Richards.png', name: 'Jack
+            Richards', role: 'Front-End' }) %> <%-
+            include('partials/team-member', { link: '/dylan-lee', image:
+            '/images/Dylan-Lee.png', name: 'Dylan Lee', role: 'GitHub Master' })
+            %> <%- include('partials/team-member', { link: '/dalan-moore',
+            image: '/images/Dalan-Moore.png', name: 'Dalan Moore', role:
+            'Front-End' }) %>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Include the footer partial -->
     <%- include('partials/footer') %>
-
-</body>
+  </body>
 </html>
