@@ -1,0 +1,405 @@
+<!-- application/src/views/become-a-tutor.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GatorTutor - Become a Tutor</title>
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <!-- Include Tagify CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css"
+      rel="stylesheet"
+    />
+    <!-- Include custom CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/flowbite/dist/flowbite.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js"
+      defer
+    ></script>
+    <!-- Include Tagify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <%- include('partials/header') %>
+    <main class="pt-[calc(6rem+5rem)] container mx-auto max-w-[800px]">
+      <section id="become-a-tutor" class="py-10 bg-white rounded-lg shadow-xl">
+        <!-- Header without Back Button -->
+        <div class="flex items-center justify-between px-6 mb-8">
+          <h2 class="text-2xl font-bold">Become a Tutor</h2>
+        </div>
+
+        <form
+          id="tutorForm"
+          action="/become-a-tutor"
+          method="POST"
+          enctype="multipart/form-data"
+          class="px-6"
+        >
+          <!-- Profile Photo and Video Upload -->
+          <div class="mb-8">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <!-- Profile Photo -->
+              <div>
+                <label
+                  for="profilePhoto"
+                  class="block mb-2 font-bold text-gray-700"
+                  >Profile Photo:</label
+                >
+                <div class="relative w-32 h-32">
+                  <img
+                    id="profilePhotoPreview"
+                    src="/images/blank-pfp.png"
+                    alt="Profile Photo"
+                    class="object-cover w-full h-full border-2 border-gray-300 rounded-full"
+                  />
+                  <input
+                    type="file"
+                    id="profilePhoto"
+                    name="profilePhoto"
+                    class="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </div>
+              </div>
+              <!-- Profile Video -->
+              <div>
+                <label
+                  for="profileVideo"
+                  class="block mb-2 font-bold text-gray-700"
+                  >Profile Video:</label
+                >
+                <div
+                  class="relative w-full h-40 border-2 border-gray-300 rounded-lg"
+                >
+                  <video
+                    id="profileVideoPreview"
+                    class="object-cover w-full h-full"
+                  ></video>
+                  <input
+                    type="file"
+                    id="profileVideo"
+                    name="profileVideo"
+                    class="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                  <button
+                    type="button"
+                    class="absolute inset-0 flex items-center justify-center text-lg font-bold text-white bg-gray-800 bg-opacity-50"
+                  >
+                    Upload Video
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio, Hourly Rate, Contact Information -->
+          <div class="mb-8">
+            <div class="space-y-6">
+              <!-- Bio -->
+              <div>
+                <label for="bio" class="block mb-2 font-bold text-gray-700"
+                  >Bio:</label
+                >
+                <textarea
+                  id="bio"
+                  name="bio"
+                  class="w-full px-3 py-2 border rounded-lg"
+                  rows="5"
+                  required
+                ></textarea>
+              </div>
+
+              <!-- Hourly Rate and Phone Number -->
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <!-- Hourly Rate -->
+                <div>
+                  <label
+                    for="hourlyRate"
+                    class="block mb-2 font-bold text-gray-700"
+                    >Hourly Rate ($):</label
+                  >
+                  <input
+                    type="number"
+                    id="hourlyRate"
+                    name="hourlyRate"
+                    class="w-full px-3 py-2 border rounded-lg"
+                    required
+                  />
+                </div>
+                <!-- Phone Number -->
+                <div>
+                  <label
+                    for="phoneNumber"
+                    class="block mb-2 font-bold text-gray-700"
+                    >Phone Number:</label
+                  >
+                  <!-- Name attribute aligns with backend -->
+                  <input
+                    type="tel"
+                    id="phoneNumber"
+                    name="contact_info"
+                    class="w-full px-3 py-2 border rounded-lg"
+                    placeholder="e.g., (123) 456-7890"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subjects and Availability -->
+          <div class="mb-8">
+            <div class="space-y-6">
+              <!-- Subjects -->
+              <div>
+                <label for="subjects" class="block mb-2 font-bold text-gray-700"
+                  >Subjects:</label
+                >
+                <!-- 'subjects' field is handled in backend -->
+                <input
+                  type="text"
+                  id="subjects"
+                  name="subjects"
+                  class="w-full px-3 py-2 border rounded-lg"
+                  placeholder="Add subjects you are interested in teaching"
+                  required
+                />
+              </div>
+
+              <!-- Availability -->
+              <div>
+                <label class="block mb-2 font-bold text-gray-700"
+                  >Availability:</label
+                >
+                <div id="availabilitySections" class="space-y-4">
+                  <div class="flex items-center space-x-4 availability-section">
+                    <!-- Day Dropdown -->
+                    <div class="w-full sm:w-1/5">
+                      <select
+                        name="day[]"
+                        id="day"
+                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        required
+                      >
+                        <option value="" disabled selected>Select day</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                      </select>
+                    </div>
+                    <!-- Start Time Input -->
+                    <div class="w-full sm:w-1/5">
+                      <input
+                        type="time"
+                        name="startTime[]"
+                        id="startTime"
+                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        min="09:00"
+                        max="18:00"
+                        required
+                      />
+                    </div>
+                    <!-- End Time Input -->
+                    <div class="w-full sm:w-1/5">
+                      <input
+                        type="time"
+                        name="endTime[]"
+                        id="endTime"
+                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        min="09:00"
+                        max="18:00"
+                        required
+                      />
+                    </div>
+                    <!-- Location Dropdown -->
+                    <div class="w-full sm:w-1/5">
+                      <select
+                        name="availabilityLocation[]"
+                        id="availabilityLocation"
+                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        required
+                      >
+                        <option value="" disabled selected>
+                          Select location
+                        </option>
+                        <option value="Online">Online</option>
+                        <option value="In-Person">In-Person</option>
+                        <option value="Both">Both</option>
+                      </select>
+                    </div>
+                    <!-- Remove Button -->
+                    <div class="w-full sm:w-1/5">
+                      <button
+                        type="button"
+                        class="w-full px-3 py-1 text-white bg-red-500 rounded-lg remove-section"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  id="addAvailability"
+                  class="px-4 py-2 mt-4 text-white bg-blue-500 rounded-lg"
+                >
+                  Add Availability
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div>
+            <button
+              type="submit"
+              class="w-full px-4 py-2 text-white bg-green-500 rounded-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <!-- Include partials/scripts -->
+    <%- include('partials/scripts') %>
+    <script>
+      // Initialize Tagify for Subjects
+      document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("subjects");
+        const subjects = <%- JSON.stringify(subjects) %>.map(subject => subject.subject_name);
+
+        const tagify = new Tagify(input, {
+          whitelist: subjects,
+          dropdown: {
+            maxItems: 20,           // maximum items to show in the suggestions dropdown
+            classname: "tags-look", // custom class for the dropdown
+            enabled: 0,             // show suggestions on focus
+            closeOnSelect: false    // keep the dropdown open after selecting a suggestion
+          }
+        });
+
+        // Ensure that the subjects are submitted as an array
+        tagify.on('change', function() {
+          const selectedTags = tagify.value.map(tag => tag.value);
+          input.value = selectedTags.join(',');
+        });
+      });
+
+      // JavaScript to handle profile photo preview
+      document
+        .getElementById("profilePhoto")
+        .addEventListener("change", function (event) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById("profilePhotoPreview").src = e.target.result;
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        });
+
+      // JavaScript to handle profile video preview
+      document
+        .getElementById("profileVideo")
+        .addEventListener("change", function (event) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const videoPreview = document.getElementById("profileVideoPreview");
+            videoPreview.src = e.target.result;
+            videoPreview.play();
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        });
+
+      // JavaScript to add dynamic availability sections
+      document.getElementById("addAvailability").addEventListener("click", function () {
+        const container = document.getElementById("availabilitySections");
+        const newSection = document.createElement("div");
+        newSection.classList.add("flex", "items-center", "space-x-4", "availability-section");
+        newSection.innerHTML = `
+          <div class="w-full sm:w-1/5">
+            <select
+              name="day[]"
+              id="day"
+              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              required
+            >
+              <option value="" disabled selected>Select day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </div>
+          <div class="w-full sm:w-1/5">
+            <input
+              type="time"
+              name="startTime[]"
+              id="startTime"
+              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              min="09:00"
+              max="18:00"
+              required
+            />
+          </div>
+          <div class="w-full sm:w-1/5">
+            <input
+              type="time"
+              name="endTime[]"
+              id="endTime"
+              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              min="09:00"
+              max="18:00"
+              required
+            />
+          </div>
+          <div class="w-full sm:w-1/5">
+            <select
+              name="availabilityLocation[]"
+              id="availabilityLocation"
+              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              required
+            >
+              <option value="" disabled selected>Select location</option>
+              <option value="Online">Online</option>
+              <option value="In-Person">In-Person</option>
+              <option value="Both">Both</option>
+            </select>
+          </div>
+          <div class="w-full sm:w-1/5">
+            <button
+              type="button"
+              class="w-full px-3 py-1 text-white bg-red-500 rounded-lg remove-section"
+            >
+              Remove
+            </button>
+          </div>
+        `;
+        container.appendChild(newSection);
+      });
+
+      // Event delegation for removing availability sections
+      document
+        .getElementById("availabilitySections")
+        .addEventListener("click", function (e) {
+          if (e.target && e.target.matches(".remove-section")) {
+            e.target.closest('.availability-section').remove();
+          }
+        });
+    </script>
+  </body>
+</html>
