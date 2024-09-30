@@ -1,19 +1,19 @@
-// models/subjectsModel.js
+const db = require("../config/db");
 
-const db = require('../config/db'); // Ensure database connection works
-
-const Subjects = {
-    getAllSubjects: (callback) => {
-        const query = 'SELECT * FROM subjects'; // Check if 'subjects' table exists and has data
-        db.query(query, (err, results) => {
-            if (err) {
-                console.error("Error fetching subjects:", err);
-                return callback(err);
-            }
-            console.log("Subjects fetched from the database:", results); // Log the result
-            callback(null, results); // Pass results to the controller
-        });
-    }
+/**
+ * Retrieves all subjects from the database.
+ * @returns {Promise<Array>} An array of subject objects.
+ */
+const getAllSubjects = async () => {
+  try {
+    const [rows] = await db.execute("SELECT id, subject_name FROM subjects");
+    return rows;
+  } catch (error) {
+    console.error("Error fetching subjects:", error);
+    throw error;
+  }
 };
 
-module.exports = Subjects;
+module.exports = {
+  getAllSubjects,
+};
