@@ -1,31 +1,123 @@
-<header x-data="{ isOpen: false }" class="bg-white shadow-md fixed w-full z-50">
-    <nav class="container mx-auto px-6 py-3">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center">
-                <a href="#" class="text-gray-800 text-xl font-bold md:text-2xl hover:text-gray-700">
-                    <img src="./images/logo.png" class="h-8 w-8 mr-2 inline-block">
-                    GatorTutor
-                </a>
-            </div>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#impact" class="navbar-item text-gray-800 hover:text-indigo-600">Impact</a>
-                <a href="#tutors" class="navbar-item text-gray-800 hover:text-indigo-600">Tutors</a>
-                <a href="#about-us" class="navbar-item text-gray-800 hover:text-indigo-600">About Us</a>
-                <a href="#sign-in" class="btn-primary text-white px-4 py-2 rounded-md">Sign In</a>
-            </div>
-            <div class="md:hidden flex items-center">
-                <button @click="isOpen = !isOpen" class="outline-none mobile-menu-button">
-                    <!-- (Toggle icons remain the same) -->
-                </button>
-            </div>
+<!-- application/src/views/partials/header.ejs -->
+<header
+  x-data="{ isOpen: false, userMenuOpen: false }"
+  class="fixed z-50 w-full bg-white shadow-md"
+>
+  <nav class="container px-6 py-3 mx-auto">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <a
+          href="/"
+          class="text-xl font-bold text-gray-800 md:text-2xl hover:text-gray-700"
+        >
+          <img src="/images/logoIcon.png" class="inline-block w-8 h-8 mr-2" />
+          GatorTutor
+        </a>
+      </div>
+      <div class="items-center hidden space-x-8 md:flex">
+        <a
+          href="/tutors"
+          class="text-gray-800 navbar-item hover:text-indigo-600"
+          >Tutors</a
+        >
+        <a
+          href="/become-a-tutor"
+          class="text-gray-800 navbar-item hover:text-indigo-600"
+          >Become a Tutor</a
+        >
+        <% if (user) { %>
+        <div class="relative" @click.away="userMenuOpen = false">
+          <button
+            @click="userMenuOpen = !userMenuOpen"
+            class="text-gray-800 hover:text-indigo-600"
+          >
+            <%= user.name %>
+          </button>
+          <div
+            x-show="userMenuOpen"
+            class="absolute right-0 w-48 mt-2 bg-white border rounded shadow-lg"
+          >
+            <a
+              href="/profile"
+              class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white"
+              >Profile</a
+            >
+            <a
+              href="/messages"
+              class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white"
+              >Messages</a
+            >
+            <a
+              href="/logout"
+              class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white"
+              >Logout</a
+            >
+          </div>
         </div>
-        <div x-show="isOpen" class="md:hidden mt-3">
-            <a href="#impact" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Impact</a>
-            <a href="#private-tutoring" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Private Tutoring</a>
-            <a href="#tutors" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Tutors</a>
-            <a href="#about-us" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">About Us</a>
-            <a href="#contact-us" class="block py-2 px-4 text-sm hover:bg-indigo-600 hover:text-white rounded transition duration-200">Contact Us</a>
-            <a href="#sign-in" class="block py-2 px-4 text-sm bg-indigo-600 text-white rounded mt-2">Sign In</a>
+        <% } else { %>
+        <a href="/login" class="px-4 py-2 text-white rounded-md btn-primary"
+          >Login</a
+        >
+        <% } %>
+      </div>
+      <div class="flex items-center md:hidden">
+        <button
+          @click="isOpen = !isOpen"
+          class="outline-none mobile-menu-button"
+        >
+          <!-- Add a menu icon here if needed -->
+        </button>
+      </div>
+    </div>
+    <div x-show="isOpen" class="mt-3 md:hidden">
+      <a
+        href="/tutors"
+        class="block px-4 py-2 text-sm transition duration-200 rounded hover:bg-indigo-600 hover:text-white"
+        >Tutors</a
+      >
+      <a
+        href="/become-a-tutor"
+        class="block px-4 py-2 text-sm transition duration-200 rounded hover:bg-indigo-600 hover:text-white"
+        >Become a Tutor</a
+      >
+      <% if (user) { %>
+      <div class="relative" @click.away="userMenuOpen = false">
+        <button
+          @click="userMenuOpen = !userMenuOpen"
+          class="block px-4 py-2 text-sm text-gray-800 transition duration-200 rounded hover:bg-indigo-600 hover:text-white"
+        >
+          <%= user.name %>
+        </button>
+        <div
+          x-show="userMenuOpen"
+          class="w-full mt-2 bg-white border rounded shadow-lg"
+        >
+          <a
+            href="/profile"
+            class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white"
+            >Profile</a
+          >
+          <a
+            href="/messages"
+            class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white"
+            >Messages</a
+          >
+          <a
+            href="/logout"
+            class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white"
+            >Logout</a
+          >
         </div>
-    </nav>
+      </div>
+      <% } else { %>
+      <a
+        href="/login"
+        class="block px-4 py-2 mt-2 text-sm text-white bg-indigo-600 rounded"
+        >Login</a
+      >
+      <% } %>
+    </div>
+  </nav>
+  <!-- Debug Box within Header -->
+  <%- include('debugbox') %>
 </header>
