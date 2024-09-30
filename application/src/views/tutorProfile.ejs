@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutor Profile</title>
+    <link rel="stylesheet" href="/css/tailwind.css" />
+  </head>
+  <body>
+    <!-- Include Header -->
+    <%- include('partials/header') %>
+
+    <main class="pt-16">
+      <section class="py-8">
+        <div class="max-w-screen-xl px-4 mx-auto">
+          <div class="flex flex-col items-center">
+            <img
+              src="<%= tutor.profile_photo %>"
+              alt="<%= tutor.username %>"
+              class="w-32 h-32 rounded-full"
+            />
+            <h1 class="mt-4 text-2xl font-semibold"><%= tutor.username %></h1>
+            <p class="text-gray-600"><%= tutor.email %></p>
+            <p class="mt-2 text-gray-800"><%= tutor.bio %></p>
+            <p class="mt-2 text-gray-800">
+              Hourly Rate: $<%= tutor.hourly_rate %>
+            </p>
+            <p class="mt-2 text-gray-800">
+              Experience: <%= tutor.experience %> years
+            </p>
+            <p class="mt-2 text-gray-800">
+              Contact Info: <%= tutor.contact_info %>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
