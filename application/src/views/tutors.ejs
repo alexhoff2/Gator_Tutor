@@ -1,0 +1,186 @@
+<!-- application/src/views/tutors.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GatorTutor - Tutors</title>
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <!-- Include Tagify CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css"
+      rel="stylesheet"
+    />
+    <!-- Include custom CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/flowbite/dist/flowbite.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js"
+      defer
+    ></script>
+    <!-- Include Tagify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+</head>
+<body class="bg-white">
+    <!-- Include Header -->
+    <%- include('partials/header') %>
+
+    <main class="pt-[calc(4rem+5rem)]">
+        <section class="py-8 antialiased">
+            <div class="flex flex-col max-w-screen-xl px-4 mx-auto 2xl:px-0 md:flex-row">
+                <!-- Filters Sidebar -->
+                <aside class="w-full mb-8 md:w-1/4 lg:w-1/5 md:mb-0 md:mr-8">
+                    <div class="p-6 rounded-lg shadow-md bg-gray-50">
+                        <h2 class="mb-4 text-xl font-semibold text-gray-800">Filters</h2>
+                        <form method="GET" action="/tutors">
+                            <div class="space-y-4">
+                                <!-- Subjects Filter -->
+                                <div>
+                                    <h3 class="mb-2 text-lg font-medium text-gray-700">Subjects</h3>
+                                    <input
+                                      type="text"
+                                      id="subjects"
+                                      name="subjects"
+                                      class="w-full px-3 py-2 border rounded-lg bg-gray-50"
+                                      placeholder="Select subjects"
+                                      value="<%= filters.subjects || '' %>"
+                                    />
+                                </div>
+
+                                <!-- Rating Filter -->
+                                <div>
+                                    <h3 class="mb-2 text-lg font-medium text-gray-700">Minimum Rating</h3>
+                                    <div class="space-y-2">
+                                        <select name="minRating" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50">
+                                            <option value="">Any</option>
+                                            <option value="4" <%= filters.minRating === '4' ? 'selected' : '' %>>4 Stars & Up</option>
+                                            <option value="3" <%= filters.minRating === '3' ? 'selected' : '' %>>3 Stars & Up</option>
+                                            <option value="2" <%= filters.minRating === '2' ? 'selected' : '' %>>2 Stars & Up</option>
+                                            <option value="1" <%= filters.minRating === '1' ? 'selected' : '' %>>1 Star & Up</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Price Filter -->
+                                <div>
+                                    <h3 class="mb-2 text-lg font-medium text-gray-700">Maximum Price</h3>
+                                    <div class="space-y-2">
+                                        <input 
+                                            type="number" 
+                                            name="maxPrice" 
+                                            placeholder="Enter maximum price" 
+                                            value="<%= filters.maxPrice || '' %>" 
+                                            class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50"
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div>
+                                    <button type="submit" class="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">Apply Filters</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </aside>
+
+                <!-- Tutors List -->
+                <div class="w-full md:w-3/4 lg:w-4/5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-2xl font-semibold text-gray-800">Available Tutors</h2>
+                        <!-- Sort Dropdown -->
+                        <div class="relative">
+                            <button id="sortDropdownButton" type="button" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100">
+                                Sort By
+                                <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <!-- Sort Dropdown Menu -->
+                            <div id="dropdownSort" class="absolute right-0 z-10 hidden w-48 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                <a href="?sort=newest" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Newest</a>
+                                <a href="?sort=rating" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Rating</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        <% if (tutors && tutors.length > 0) { %>
+                            <% tutors.forEach(tutor => { %>
+                                <div class="overflow-hidden rounded-lg shadow-md bg-gray-50">
+                                    <div class="relative">
+                                        <img 
+                                            class="object-cover w-full h-48" 
+                                            src="<%= tutor.profile_photo || '/images/blank-pfp.png' %>" 
+                                            alt="<%= tutor.username %>"
+                                        >
+                                        <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 bg-black bg-opacity-25 opacity-0 hover:opacity-100">
+                                            <a href="/tutors/<%= tutor.id %>" class="px-4 py-2 text-white bg-blue-600 rounded-lg">View Profile</a>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <h3 class="text-lg font-semibold text-gray-800"><%= tutor.username %></h3>
+                                        <p class="text-sm text-gray-600"><%= tutor.subject %></p>
+                                        <div class="flex items-center mt-2">
+                                            <span class="mr-1 text-yellow-400">&#9733;</span>
+                                            <span class="text-sm text-gray-700"><%= tutor.reviews %> reviews</span>
+                                        </div>
+                                        <p class="mt-2 text-gray-700">$<%= tutor.hourly_rate %> / hour</p>
+                                        <a href="/tutors/<%= tutor.id %>" class="inline-block px-4 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700">View Profile</a>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <p class="text-center text-gray-500">No tutors found matching your criteria.</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Include Tagify Initialization Script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("subjects");
+        const subjects = <%- JSON.stringify(subjects) %>.map(subject => subject.subject_name);
+
+        const tagify = new Tagify(input, {
+          whitelist: subjects,
+          dropdown: {
+            maxItems: 20,           // maximum items to show in the suggestions dropdown
+            classname: "tags-look", // custom class for the dropdown
+            enabled: 0,             // show suggestions on focus
+            closeOnSelect: false    // keep the dropdown open after selecting a suggestion
+          }
+        });
+
+        // Ensure that the subjects are submitted as a comma-separated string
+        tagify.on('change', function() {
+          const selectedTags = tagify.value.map(tag => tag.value);
+          input.value = selectedTags.join(',');
+        });
+      });
+
+      // Toggle Sort Dropdown
+      document.getElementById("sortDropdownButton").addEventListener("click", function () {
+        const dropdown = document.getElementById("dropdownSort");
+        dropdown.classList.toggle("hidden");
+      });
+
+      // Close Sort Dropdown when clicking outside
+      document.addEventListener("click", function(event) {
+        const dropdown = document.getElementById("dropdownSort");
+        const button = document.getElementById("sortDropdownButton");
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+    </script>
+</body>
+</html>
