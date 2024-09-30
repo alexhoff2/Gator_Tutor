@@ -1,74 +1,60 @@
-// controlers/usersController.js
+// application/src/controllers/usersController.js
 
-const usersModel = require('../../src/models/usersModel');
-const subjectsModel = require('../../src/models/subjectsModel');
+const User = require("../models/usersModel"); // Ensure correct path
 
-// Render the registration page and load subjects dynamically
-exports.renderRegisterPage = (req, res) => {
-    console.log("Fetching subjects in controller...");
-    subjectsModel.getAllSubjects((err, subjects) => {
-        if (err) {
-            console.error("Error in fetching subjects:", err);
-            return res.status(500).send('Error loading subjects');
-        }
-        console.log("Subjects passed to view:", subjects); // Check if this logs the subjects correctly
-        res.render('register', { subjects });
-    });
-};
+exports.becomeTutor = async (req, res) => {
+  try {
+    const {
+      bio, // Extract bio from the form
+      hourlyRate,
+      experience,
+      contact_info,
+      day,
+      startTime,
+      endTime,
+      availabilityLocation, // Keep this to construct the JSON object
+    } = req.body;
 
+    // Handle file uploads
+    const profilePhoto = req.files["profilePhoto"]
+      ? req.files["profilePhoto"][0].path
+      : null;
+    const profileVideo = req.files["profileVideo"]
+      ? req.files["profileVideo"][0].path
+      : null;
 
-// Handle displaying the registration form
-exports.showRegistrationForm = (req, res) => {
-    subjectsModel.getAllSubjects((err, subjects) => {
-        if (err) {
-            return res.status(500).send('Error fetching subjects');
-        }
-        res.render('register', { subjects }); // Pass subjects to the view
-    });
-};
+    // Check if user is logged in
+    if (!req.session.user || !req.session.user.id) {
+      return res.status(401).send("Unauthorized: Please log in.");
+    }
 
-// Handle user registration
-exports.registerUser = (req, res) => {
-    const { username, email, password, role, expertise, hourly_rate, subjects } = req.body;
+    const userId = req.session.user.id;
 
-    const is_tutor = role === 'tutor' ? true : false;
+    // Format availability as JSON
+    const availability = day.map((d, index) => ({
+      day: d,
+      start_time: startTime[index],
+      end_time: endTime[index],
+      location: availabilityLocation[index],
+    }));
 
-    // Call the model to create a new user
-    usersModel.create({
-        username,
-        email,
-        password,
-        role,
-        is_tutor,
-        expertise: is_tutor ? expertise : null, // Only include expertise if they're a tutor
-        hourly_rate: is_tutor ? hourly_rate : null, // Only include rate if they're a tutor
-        subjects
-    }, (err, result) => {
-        if (err) {
-            return res.status(500).send('Error creating user');
-        }
-        res.status(201).send('User registered successfully');
-    });
-};
+    // Insert tutor post using the User model
+    const tutorPostData = {
+      user_id: userId,
+      bio, // Use bio directly
+      availability: JSON.stringify(availability), // Store as JSON
+      hourly_rate: hourlyRate,
+      experience,
+      contact_info, // Included in the data to be stored
+      profile_photo: profilePhoto,
+      profile_video: profileVideo,
+    };
 
-// Handle user login
-exports.loginUser = (req, res) => {
-    const { email, password } = req.body;
-    usersModel.findUserByEmail(email, (err, user) => {
-        if (err || !user || user.password !== password) {
-            return res.status(401).send('Invalid credentials');
-        }
-        res.status(200).send('Login successful');
-    });
-};
+    await User.createTutorPost(tutorPostData);
 
-// Retrieve user profile by ID
-exports.getUserProfile = (req, res) => {
-    const userId = req.params.id;
-    usersModel.findUserById(userId, (err, user) => {
-        if (err || !user) {
-            return res.status(404).send('User not found');
-        }
-        res.status(200).json(user);
-    });
+    res.redirect("/"); // Redirect to home or appropriate page after successful submission
+  } catch (error) {
+    console.error("Error in becomeTutor:", error);
+    res.status(500).send("Internal Server Error: " + error.message);
+  }
 };
