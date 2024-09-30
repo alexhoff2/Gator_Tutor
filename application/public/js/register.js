@@ -1,23 +1,31 @@
-// public/js/register.js
+document.addEventListener('DOMContentLoaded', () => {
+    const roleButtons = document.querySelectorAll('input[name="role"]');
+    const registerForm = document.getElementById('registerForm');
+    const nextToStep3Button = document.getElementById('nextToStep3');
+    const steps = document.querySelectorAll('.step');
+    let selectedRole = '';
 
-document.addEventListener('DOMContentLoaded', function () {
-    const studentBtn = document.getElementById('studentBtn');
-    const tutorBtn = document.getElementById('tutorBtn');
-    const registrationForm = document.getElementById('registrationForm');
-    const studentFields = document.getElementById('studentFields');
-    const tutorFields = document.getElementById('tutorFields');
-
-    // Show the form and student-specific fields when "I'm a Student" is clicked
-    studentBtn.addEventListener('click', function () {
-        registrationForm.style.display = 'block';  // Show the form
-        studentFields.style.display = 'block';     // Show student-specific fields
-        tutorFields.style.display = 'none';        // Hide tutor-specific fields
+    roleButtons.forEach(button => {
+        button.addEventListener('change', () => {
+            selectedRole = button.value;
+            registerForm.action = `/register/${selectedRole}`;
+            showStep(2);
+        });
     });
 
-    // Show the form and tutor-specific fields when "I'm a Tutor" is clicked
-    tutorBtn.addEventListener('click', function () {
-        registrationForm.style.display = 'block';  // Show the form
-        studentFields.style.display = 'none';      // Hide student-specific fields
-        tutorFields.style.display = 'block';       // Show tutor-specific fields
-    });
+    if (nextToStep3Button) {
+        nextToStep3Button.addEventListener('click', () => {
+            if (selectedRole === 'tutor') {
+                showStep(3);
+            } else {
+                registerForm.submit();
+            }
+        });
+    }
+
+    function showStep(stepNumber) {
+        steps.forEach((step, index) => {
+            step.classList.toggle('hidden', index !== stepNumber - 1);
+        });
+    }
 });
