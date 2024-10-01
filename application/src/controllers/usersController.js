@@ -17,10 +17,10 @@ exports.becomeTutor = async (req, res) => {
 
     // Handle file uploads
     const profilePhoto = req.files["profilePhoto"]
-      ? req.files["profilePhoto"][0].path
+      ? `/uploads/${req.files["profilePhoto"][0].filename}`
       : null;
     const profileVideo = req.files["profileVideo"]
-      ? req.files["profileVideo"][0].path
+      ? `/uploads/${req.files["profileVideo"][0].filename}`
       : null;
 
     // Check if user is logged in

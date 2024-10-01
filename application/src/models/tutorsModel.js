@@ -23,10 +23,6 @@ const TutorsModel = {
       `;
       queryParams.push(filters.subject);
     }
-    if (filters.minRating) {
-      query += ` AND tutor_posts.reviews >= ?`;
-      queryParams.push(filters.minRating);
-    }
     if (filters.maxPrice) {
       query += ` AND tutor_posts.hourly_rate <= ?`;
       queryParams.push(filters.maxPrice);
@@ -35,9 +31,6 @@ const TutorsModel = {
     switch (sort) {
       case "newest":
         query += ` ORDER BY tutor_posts.created_at DESC`;
-        break;
-      case "rating":
-        query += ` ORDER BY tutor_posts.reviews DESC`;
         break;
       case "price_asc":
         query += ` ORDER BY tutor_posts.hourly_rate ASC`;

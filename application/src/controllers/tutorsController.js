@@ -8,11 +8,10 @@ const listTutors = async (req, res) => {
   try {
     const filters = {
       subject: req.query.subject ? req.query.subject.trim() : null,
-      minRating: req.query.minRating ? parseFloat(req.query.minRating) : null,
       maxPrice: req.query.maxPrice ? parseFloat(req.query.maxPrice) : null,
     };
 
-    const sortOptions = ["newest", "rating", "price_asc", "price_desc"];
+    const sortOptions = ["newest", "price_asc", "price_desc"];
     const sort = sortOptions.includes(req.query.sort)
       ? req.query.sort
       : "newest";

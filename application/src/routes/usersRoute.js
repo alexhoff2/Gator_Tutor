@@ -11,7 +11,7 @@ const path = require("path");
 // Configure Multer storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/uploads/"));
+    cb(null, path.join(__dirname, "../../public/uploads/"));
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -51,6 +51,8 @@ const subjectsModel = require("../models/subjectsModel"); // Add this line
 //   console.log("POST /register");
 //   authController.postregisterForm(req, res, next); // Ensure this is correct
 // });
+
+// Alternatively, if you have specific logic here, adjust accordingly
 
 // Route to handle form submission from become-a-tutor.ejs
 router.post(
