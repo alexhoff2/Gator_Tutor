@@ -5,14 +5,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GatorTutor - Become a Tutor</title>
-    <link rel="stylesheet" href="/css/tailwind.css" />
-    <link rel="stylesheet" href="/css/custom.css" />
     <!-- Include Tagify CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css"
       rel="stylesheet"
     />
-    <!-- Include custom CSS -->
+    <!-- Include your custom CSS after Tagify CSS -->
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/flowbite/dist/flowbite.js"></script>
     <link
@@ -158,102 +158,18 @@
           <div class="mb-8">
             <div class="space-y-6">
               <!-- Subjects -->
-              <div>
-                <label for="subjects" class="block mb-2 font-bold text-gray-700"
-                  >Subjects:</label
-                >
-                <!-- 'subjects' field is handled in backend -->
-                <input
-                  type="text"
-                  id="subjects"
-                  name="subjects"
-                  class="w-full px-3 py-2 border rounded-lg"
-                  placeholder="Add subjects you are interested in teaching"
-                  required
-                />
+              <div class="mb-6">
+                <label for="subjects" class="block mb-2 font-bold text-gray-700">Subjects:</label>
+                <input id="subjects" name="subjects" placeholder="Add subjects..." />
               </div>
 
               <!-- Availability -->
-              <div>
-                <label class="block mb-2 font-bold text-gray-700"
-                  >Availability:</label
-                >
+              <div class="mb-6">
+                <label class="block mb-2 font-bold text-gray-700">Availability:</label>
                 <div id="availabilitySections" class="space-y-4">
-                  <div class="flex items-center space-x-4 availability-section">
-                    <!-- Day Dropdown -->
-                    <div class="w-full sm:w-1/5">
-                      <select
-                        name="day[]"
-                        id="day"
-                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      >
-                        <option value="" disabled selected>Select day</option>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                        <option value="Saturday">Saturday</option>
-                        <option value="Sunday">Sunday</option>
-                      </select>
-                    </div>
-                    <!-- Start Time Input -->
-                    <div class="w-full sm:w-1/5">
-                      <input
-                        type="time"
-                        name="startTime[]"
-                        id="startTime"
-                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        min="09:00"
-                        max="18:00"
-                        required
-                      />
-                    </div>
-                    <!-- End Time Input -->
-                    <div class="w-full sm:w-1/5">
-                      <input
-                        type="time"
-                        name="endTime[]"
-                        id="endTime"
-                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        min="09:00"
-                        max="18:00"
-                        required
-                      />
-                    </div>
-                    <!-- Location Dropdown -->
-                    <div class="w-full sm:w-1/5">
-                      <select
-                        name="availabilityLocation[]"
-                        id="availabilityLocation"
-                        class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      >
-                        <option value="" disabled selected>
-                          Select location
-                        </option>
-                        <option value="Online">Online</option>
-                        <option value="In-Person">In-Person</option>
-                        <option value="Both">Both</option>
-                      </select>
-                    </div>
-                    <!-- Remove Button -->
-                    <div class="w-full sm:w-1/5">
-                      <button
-                        type="button"
-                        class="w-full px-3 py-1 text-white bg-red-500 rounded-lg remove-section"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
+                  <!-- Availability sections will be added here dynamically -->
                 </div>
-                <button
-                  type="button"
-                  id="addAvailability"
-                  class="px-4 py-2 mt-4 text-white bg-blue-500 rounded-lg"
-                >
+                <button type="button" id="addAvailability" class="px-4 py-2 mt-4 text-white bg-blue-500 rounded-lg">
                   Add Availability
                 </button>
               </div>
@@ -276,26 +192,75 @@
     <!-- Include partials/scripts -->
     <%- include('partials/scripts') %>
     <script>
-      // Initialize Tagify for Subjects
       document.addEventListener("DOMContentLoaded", function () {
-        const input = document.getElementById("subjects");
-        const subjects = <%- JSON.stringify(subjects) %>.map(subject => subject.subject_name);
+        // Initialize Tagify for Subjects
+        const subjectsInput = document.getElementById("subjects");
+        const subjectsList = <%- JSON.stringify(subjects) %>.map(subject => subject.subject_name);
 
-        const tagify = new Tagify(input, {
-          whitelist: subjects,
+        const tagify = new Tagify(subjectsInput, {
+          whitelist: subjectsList,
+          enforceWhitelist: true,
           dropdown: {
-            maxItems: 20,           // maximum items to show in the suggestions dropdown
-            classname: "tags-look", // custom class for the dropdown
-            enabled: 0,             // show suggestions on focus
-            closeOnSelect: false    // keep the dropdown open after selecting a suggestion
+            maxItems: 20,
+            classname: "tags-look",
+            enabled: 0,
+            closeOnSelect: false
           }
         });
 
-        // Ensure that the subjects are submitted as an array
-        tagify.on('change', function() {
-          const selectedTags = tagify.value.map(tag => tag.value);
-          input.value = selectedTags.join(',');
+        // Availability section functionality
+        const addAvailabilityBtn = document.getElementById("addAvailability");
+        const availabilitySections = document.getElementById("availabilitySections");
+
+        addAvailabilityBtn.addEventListener("click", addAvailabilitySection);
+
+        function addAvailabilitySection() {
+          const section = document.createElement("div");
+          section.className = "flex items-center space-x-4 availability-section";
+          section.innerHTML = `
+            <select name="day[]" class="w-1/4" required>
+              <option value="" disabled selected>Day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+            <input type="time" name="startTime[]" class="w-1/4" required>
+            <input type="time" name="endTime[]" class="w-1/4" required>
+            <select name="availabilityLocation[]" class="w-1/4" required>
+              <option value="" disabled selected>Location</option>
+              <option value="Online">Online</option>
+              <option value="In-Person">In-Person</option>
+              <option value="Both">Both</option>
+            </select>
+            <button type="button" class="px-2 py-1 text-white bg-red-500 rounded remove-availability">Remove</button>
+          `;
+          availabilitySections.appendChild(section);
+        }
+
+        availabilitySections.addEventListener("click", function(e) {
+          if (e.target.classList.contains("remove-availability")) {
+            e.target.closest(".availability-section").remove();
+          }
         });
+
+        // Form validation
+        const form = document.getElementById("tutorForm");
+        form.addEventListener("submit", function(e) {
+          e.preventDefault();
+          if (validateForm()) {
+            this.submit();
+          }
+        });
+
+        function validateForm() {
+          // Add your form validation logic here
+          // Return true if the form is valid, false otherwise
+          return true;
+        }
       });
 
       // JavaScript to handle profile photo preview
@@ -320,85 +285,6 @@
             videoPreview.play();
           };
           reader.readAsDataURL(event.target.files[0]);
-        });
-
-      // JavaScript to add dynamic availability sections
-      document.getElementById("addAvailability").addEventListener("click", function () {
-        const container = document.getElementById("availabilitySections");
-        const newSection = document.createElement("div");
-        newSection.classList.add("flex", "items-center", "space-x-4", "availability-section");
-        newSection.innerHTML = `
-          <div class="w-full sm:w-1/5">
-            <select
-              name="day[]"
-              id="day"
-              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              required
-            >
-              <option value="" disabled selected>Select day</option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
-          </div>
-          <div class="w-full sm:w-1/5">
-            <input
-              type="time"
-              name="startTime[]"
-              id="startTime"
-              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              min="09:00"
-              max="18:00"
-              required
-            />
-          </div>
-          <div class="w-full sm:w-1/5">
-            <input
-              type="time"
-              name="endTime[]"
-              id="endTime"
-              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              min="09:00"
-              max="18:00"
-              required
-            />
-          </div>
-          <div class="w-full sm:w-1/5">
-            <select
-              name="availabilityLocation[]"
-              id="availabilityLocation"
-              class="block w-full px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              required
-            >
-              <option value="" disabled selected>Select location</option>
-              <option value="Online">Online</option>
-              <option value="In-Person">In-Person</option>
-              <option value="Both">Both</option>
-            </select>
-          </div>
-          <div class="w-full sm:w-1/5">
-            <button
-              type="button"
-              class="w-full px-3 py-1 text-white bg-red-500 rounded-lg remove-section"
-            >
-              Remove
-            </button>
-          </div>
-        `;
-        container.appendChild(newSection);
-      });
-
-      // Event delegation for removing availability sections
-      document
-        .getElementById("availabilitySections")
-        .addEventListener("click", function (e) {
-          if (e.target && e.target.matches(".remove-section")) {
-            e.target.closest('.availability-section').remove();
-          }
         });
     </script>
   </body>
