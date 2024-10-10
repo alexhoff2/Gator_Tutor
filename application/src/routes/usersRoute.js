@@ -3,10 +3,11 @@ console.log("Loading usersRoute.js");
 const express = require("express");
 const router = express.Router();
 const usersController = require("../controllers/usersController");
-const authController = require("../controllers/authController");
 const { ensureAuthenticated } = require("../middleware/authMiddleware");
 const multer = require("multer");
 const path = require("path");
+const subjectsModel = require("../models/subjectsModel");
+const messagesController = require("../controllers/messagesController");
 
 // Configure Multer storage
 const storage = multer.diskStorage({
@@ -44,16 +45,6 @@ const upload = multer({
   },
 });
 
-const subjectsModel = require("../models/subjectsModel"); // Add this line
-
-// Remove the conflicting POST /register route
-// router.post("/register", (req, res, next) => {
-//   console.log("POST /register");
-//   authController.postregisterForm(req, res, next); // Ensure this is correct
-// });
-
-// Alternatively, if you have specific logic here, adjust accordingly
-
 // Route to handle form submission from become-a-tutor.ejs
 router.post(
   "/become-a-tutor",
@@ -65,17 +56,27 @@ router.post(
 );
 
 // Route for the "become a tutor" page
-router.get("/become-a-tutor", ensureAuthenticated, async (req, res) => {
-  try {
-    const subjects = await subjectsModel.getAllSubjects(); // Fetch subjects
-    res.render("become-a-tutor", { subjects }); // Pass subjects to the view
-  } catch (error) {
-    console.error("Error fetching subjects:", error);
-    res.status(500).send("Internal Server Error");
+router.get(
+  "/become-a-tutor",
+  ensureAuthenticated,
+  usersController.checkTutorPost,
+  async (req, res) => {
+    try {
+      const subjects = await subjectsModel.getAllSubjects();
+      res.render("become-a-tutor", { subjects });
+    } catch (error) {
+      console.error("Error fetching subjects:", error);
+      res.status(500).send("Internal Server Error");
+    }
   }
-});
+);
 
-// Other routes...
-// router.get('/someRoute', usersController.someFunction);
+// Messages routes
+router.post(
+  "/messages/send",
+  ensureAuthenticated,
+  messagesController.sendMessage
+);
+router.get("/messages", ensureAuthenticated, messagesController.getMessages);
 
 module.exports = router;

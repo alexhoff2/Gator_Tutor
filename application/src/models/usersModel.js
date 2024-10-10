@@ -32,7 +32,7 @@ const User = {
       throw err;
     }
   },
-  createTutorPost: async (tutorPostData) => {
+  createTutorPost: async (tutorPostData, subjects) => {
     const {
       user_id,
       bio,
@@ -57,7 +57,7 @@ const User = {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
     try {
-      await db.query(query, [
+      const [result] = await db.query(query, [
         user_id,
         bio,
         availability, // Store as JSON
@@ -67,6 +67,16 @@ const User = {
         profile_photo,
         profile_video,
       ]);
+      const tutorPostId = result.insertId;
+
+      // Insert subjects into tutor_subjects table using tutorPostId instead of user_id
+      const tutorSubjectsPromises = subjects.map((subjectId) =>
+        db.query(
+          "INSERT INTO tutor_subjects (tutor_id, subject_id) VALUES (?, ?)",
+          [tutorPostId, subjectId] // Changed from user_id to tutorPostId
+        )
+      );
+      await Promise.all(tutorSubjectsPromises);
     } catch (err) {
       throw err;
     }
