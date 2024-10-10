@@ -1,0 +1,13 @@
+# Use an official Node.js image from Docker Hub
+FROM node:16
+
+WORKDIR /usr/src
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 3001 3002
+
+CMD ["node", "dev.js"]
