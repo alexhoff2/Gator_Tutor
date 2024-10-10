@@ -9,6 +9,7 @@ require("dotenv").config();
 const usersRoutes = require("./routes/usersRoute");
 const authRoutes = require("./routes/authRoute");
 const tutorsRoute = require("./routes/tutorsRoute");
+const messagesRoutes = require("./routes/messagesRoute");
 
 const { ensureAuthenticated } = require("./middleware/authMiddleware");
 const errorHandler = require("./middleware/errorHandler");
@@ -56,6 +57,9 @@ app.use("/", authRoutes);
 
 // Use Tutors Route
 app.use("/tutors", tutorsRoute);
+
+// Use Messages Route
+app.use("/messages", messagesRoutes);
 
 // Define team members data
 const teamMembers = {
@@ -115,6 +119,15 @@ app.get("/:memberId", (req, res) => {
 });
 
 // Error handling middleware
-app.use(errorHandler);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
+
+// Add this after setting up your routes
+console.log(
+  "Registered routes:",
+  app._router.stack.filter((r) => r.route).map((r) => r.route.path)
+);
 
 module.exports = app; // Export the app so it can be used in index.js.
