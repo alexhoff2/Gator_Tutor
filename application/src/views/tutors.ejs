@@ -4,174 +4,131 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GatorTutor - Tutors</title>
+    <title>GatorTutor - Find Your Perfect Tutor</title>
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <style>
+        .tagify__dropdown {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .tagify__dropdown__item {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .tagify__dropdown__item:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
     <link rel="stylesheet" href="/css/tailwind.css" />
     <link rel="stylesheet" href="/css/custom.css" />
-    <!-- Include Tagify CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css"
-      rel="stylesheet"
-    />
-    <!-- Include custom CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/flowbite/dist/flowbite.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js"
-      defer
-    ></script>
-    <!-- Include Tagify JS -->
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 </head>
-<body class="bg-white">
-    <!-- Include Header -->
+<body class="bg-gray-50">
     <%- include('partials/header') %>
 
-    <main class="pt-[calc(4rem+5rem)]">
-        <section class="py-8 antialiased">
-            <div class="flex flex-col max-w-screen-xl px-4 mx-auto 2xl:px-0 md:flex-row">
-                <!-- Filters Sidebar -->
-                <aside class="w-full mb-8 md:w-1/4 lg:w-1/5 md:mb-0 md:mr-8">
-                    <div class="p-6 rounded-lg shadow-md bg-gray-50">
-                        <h2 class="mb-4 text-xl font-semibold text-gray-800">Filters</h2>
-                        <form method="GET" action="/tutors">
-                            <div class="space-y-4">
-                                <!-- Subjects Filter -->
-                                <div>
-                                    <h3 class="mb-2 text-lg font-medium text-gray-700">Subjects</h3>
-                                    <input
-                                      type="text"
-                                      id="subjects"
-                                      name="subjects"
-                                      class="w-full px-3 py-2 border rounded-lg bg-gray-50"
-                                      placeholder="Select subjects"
-                                      value="<%= filters.subjects || '' %>"
-                                    />
-                                </div>
-
-                                <!-- Rating Filter -->
-                                <div>
-                                    <h3 class="mb-2 text-lg font-medium text-gray-700">Minimum Rating</h3>
-                                    <div class="space-y-2">
-                                        <select name="minRating" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50">
-                                            <option value="4" <%= filters.minRating === '4' ? 'selected' : '' %>>4</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Price Filter -->
-                                <div>
-                                    <h3 class="mb-2 text-lg font-medium text-gray-700">Maximum Price</h3>
-                                    <div class="space-y-2">
-                                        <input 
-                                            type="number" 
-                                            name="maxPrice" 
-                                            placeholder="Enter maximum price" 
-                                            value="<%= filters.maxPrice || '' %>" 
-                                            class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50"
-                                        />
-                                    </div>
-                                </div>
-
-                                <!-- Submit Button -->
-                                <div>
-                                    <button type="submit" class="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">Apply Filters</button>
+    <main class="pt-24 pb-16">
+        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <h1 class="mb-8 text-3xl font-bold text-gray-900">Find Your Perfect Tutor</h1>
+            
+            <div class="flex flex-col gap-8 lg:flex-row">
+                <!-- Filters Section -->
+                <aside class="w-full lg:w-1/4">
+                    <div class="p-6 bg-white rounded-lg shadow-xl">
+                        <h2 class="mb-4 text-xl font-semibold">Filters</h2>
+                        <form id="filter-form">
+                            <div class="mb-4">
+                                <label for="subjects" class="block mb-1 text-sm font-medium text-gray-700">Subjects</label>
+                                <input id="subjects" name="subjects" class="w-full p-2 border rounded-md" placeholder="Enter subjects..." value="<%= filters.subjects.join(',') %>">
+                            </div>
+                            <div class="mb-4">
+                                <label for="price-range" class="block mb-1 text-sm font-medium text-gray-700">Price Range</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="number" id="min-price" name="min-price" class="w-1/2 p-2 border rounded-md" placeholder="Min" value="<%= filters.minPrice || '' %>">
+                                    <span>-</span>
+                                    <input type="number" id="max-price" name="max-price" class="w-1/2 p-2 border rounded-md" placeholder="Max" value="<%= filters.maxPrice || '' %>">
                                 </div>
                             </div>
+                            <button type="submit" class="w-full px-4 py-2 text-white transition duration-300 bg-blue-600 rounded-md hover:bg-blue-700">Apply Filters</button>
                         </form>
                     </div>
                 </aside>
 
                 <!-- Tutors List -->
-                <div class="w-full md:w-3/4 lg:w-4/5">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-2xl font-semibold text-gray-800">Available Tutors</h2>
-                        <!-- Sort Dropdown -->
-                        <div class="relative">
-                            <button id="sortDropdownButton" type="button" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100">
-                                Sort By
-                                <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                <div class="w-full lg:w-3/4">
+                    <div class="flex items-center justify-between mb-6">
+                        <p class="text-gray-600"><%= tutors.length %> tutors found</p>
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="inline-flex items-center px-4 py-2 text-gray-700 bg-white border rounded-md hover:bg-gray-50">
+                                <span>Sort By: <%= (sort && sort.charAt(0).toUpperCase() + sort.slice(1)) || 'Newest' %></span>
+                                <svg class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <!-- Sort Dropdown Menu -->
-                            <div id="dropdownSort" class="absolute right-0 z-10 hidden w-48 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                                <a href="?sort=newest" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Newest</a>
+                            <div x-show="open" @click.away="open = false" class="absolute right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                    <a href="#" data-sort-option="newest" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Newest</a>
+                                    <a href="#" data-sort-option="oldest" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Oldest</a>
+                                    <a href="#" data-sort-option="price-asc" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Price: Low to High</a>
+                                    <a href="#" data-sort-option="price-desc" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Price: High to Low</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        <% if (tutors && tutors.length > 0) { %>
+                    <div id="tutorsList" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <% if (tutors.length > 0) { %>
                             <% tutors.forEach(tutor => { %>
-                                <div class="overflow-hidden rounded-lg shadow-md bg-gray-50">
+                                <div class="overflow-hidden transition-transform duration-300 bg-white rounded-lg shadow-xl hover:scale-105"
+                                     data-subjects="<%= tutor.subjects %>"
+                                     data-rate="<%= tutor.hourly_rate %>"
+                                     data-name="<%= tutor.username %>">
                                     <div class="relative">
-                                        <img 
-                                            class="object-cover w-full h-48" 
-                                            src="<%= tutor.profile_photo || '/images/blank-pfp.png' %>" 
-                                            alt="<%= tutor.username %>"
-                                        >
-                                        <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 bg-black bg-opacity-25 opacity-0 hover:opacity-100">
-                                            <a href="/tutors/<%= tutor.id %>" class="px-4 py-2 text-white bg-blue-600 rounded-lg">View Profile</a>
+                                        <img src="<%= tutor.profile_photo || '/images/default-avatar.png' %>" alt="<%= tutor.username %>'s profile photo" class="object-cover w-full h-48">
+                                        <div class="absolute top-0 right-0 px-2 py-1 m-2 text-sm font-semibold text-white bg-blue-600 rounded-md">
+                                            $<%= tutor.hourly_rate %>/hr
                                         </div>
                                     </div>
                                     <div class="p-4">
-                                        <h3 class="text-lg font-semibold text-gray-800"><%= tutor.username %></h3>
-                                        <p class="text-sm text-gray-600"><%= tutor.subject %></p>
-                                        <p class="mt-2 text-gray-700">$<%= tutor.hourly_rate %> / hour</p>
-                                        <a href="/tutors/<%= tutor.id %>" class="inline-block px-4 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700">View Profile</a>
+                                        <h3 class="mb-2 text-lg font-semibold text-gray-800"><%= tutor.username %></h3>
+                                        <div class="mb-3">
+                                            <% if (tutor.subjects) { %>
+                                                <% tutor.subjects.split(',').slice(0, 3).forEach(subject => { %>
+                                                    <span class="inline-block px-2 py-1 mb-2 mr-2 text-xs text-blue-800 bg-blue-100 rounded-full"><%= subject.trim() %></span>
+                                                <% }); %>
+                                                <% if (tutor.subjects.split(',').length > 3) { %>
+                                                    <span class="inline-block px-2 py-1 text-xs text-gray-800 bg-gray-100 rounded-full">+<%= tutor.subjects.split(',').length - 3 %> more</span>
+                                                <% } %>
+                                            <% } else { %>
+                                                <span class="text-sm text-gray-500">No subjects listed</span>
+                                            <% } %>
+                                        </div>
+                                        <a href="/tutors/<%= tutor.id %>" class="block w-full px-4 py-2 font-semibold text-center text-white transition duration-300 bg-blue-600 rounded-md hover:bg-blue-700">View Profile</a>
                                     </div>
                                 </div>
                             <% }); %>
                         <% } else { %>
-                            <p class="text-center text-gray-500">No tutors found matching your criteria.</p>
+                            <div class="py-8 text-center col-span-full">
+                                <p class="text-lg text-gray-500">No tutors found matching your criteria.</p>
+                                <p class="mt-2 text-gray-400">Try adjusting your filters or search terms.</p>
+                            </div>
                         <% } %>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Include Tagify Initialization Script -->
+    <%- include('partials/footer') %>
+    <%- include('partials/scripts') %>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const input = document.getElementById("subjects");
-        const subjects = <%- JSON.stringify(subjects) %>.map(subject => subject.subject_name);
-
-        const tagify = new Tagify(input, {
-          whitelist: subjects,
-          dropdown: {
-            maxItems: 20,           // maximum items to show in the suggestions dropdown
-            classname: "tags-look", // custom class for the dropdown
-            enabled: 0,             // show suggestions on focus
-            closeOnSelect: false    // keep the dropdown open after selecting a suggestion
-          }
-        });
-
-        // Ensure that the subjects are submitted as a comma-separated string
-        tagify.on('change', function() {
-          const selectedTags = tagify.value.map(tag => tag.value);
-          input.value = selectedTags.join(',');
-        });
-      });
-
-      // Toggle Sort Dropdown
-      document.getElementById("sortDropdownButton").addEventListener("click", function () {
-        const dropdown = document.getElementById("dropdownSort");
-        dropdown.classList.toggle("hidden");
-      });
-
-      // Close Sort Dropdown when clicking outside
-      document.addEventListener("click", function(event) {
-        const dropdown = document.getElementById("dropdownSort");
-        const button = document.getElementById("sortDropdownButton");
-        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-          dropdown.classList.add("hidden");
-        }
-      });
+        // Pass subjects data to JavaScript
+        const subjectsData = <%- JSON.stringify(subjects) %>;
+        console.log("Subjects data:", subjectsData);
     </script>
+    <script src="/js/tutors.js"></script>
 </body>
 </html>
