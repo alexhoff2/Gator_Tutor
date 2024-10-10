@@ -1,47 +1,47 @@
 <!-- application/src/views/partials/debugbox.ejs -->
-<div class="debug-box p-4 border-t border-gray-200 bg-gray-50">
+<div class="p-4 mt-10 border-t border-gray-200 debug-box bg-gray-50">
     <div class="text-gray-800">
         <p><strong>Debug:</strong></p>
     </div>
     <div class="flex flex-wrap space-x-4">
         <% if (user) { %>
-            <div class="bg-green-500 text-white p-2 rounded">
+            <div class="p-2 text-white bg-green-500 rounded">
                 <p><strong>Status:</strong> Logged in</p>
             </div>
-            <div class="bg-green-500 text-white p-2 rounded">
+            <div class="p-2 text-white bg-green-500 rounded">
                 <p><strong>User ID:</strong>
                     <%= user.id %>
                 </p>
             </div>
-            <div class="bg-green-500 text-white p-2 rounded">
+            <div class="p-2 text-white bg-green-500 rounded">
                 <p><strong>Username:</strong>
                     <%= user.name %>
                 </p>
             </div>
-            <div class="bg-green-500 text-white p-2 rounded">
+            <div class="p-2 text-white bg-green-500 rounded">
                 <p><strong>Email:</strong>
                     <%= user.email %>
                 </p>
             </div>
-            <div class="bg-green-500 text-white p-2 rounded">
+            <div class="p-2 text-white bg-green-500 rounded">
                 <p><strong>Role:</strong>
                     <%= user.role %>
                 </p>
             </div>
             <% } else { %>
-                <div class="bg-red-500 text-white p-2 rounded">
+                <div class="p-2 text-white bg-red-500 rounded">
                     <p><strong>Status:</strong> Not logged in</p>
                 </div>
-                <div class="bg-red-500 text-white p-2 rounded">
+                <div class="p-2 text-white bg-red-500 rounded">
                     <p><strong>User ID:</strong> null</p>
                 </div>
-                <div class="bg-red-500 text-white p-2 rounded">
+                <div class="p-2 text-white bg-red-500 rounded">
                     <p><strong>Username:</strong> null</p>
                 </div>
-                <div class="bg-red-500 text-white p-2 rounded">
+                <div class="p-2 text-white bg-red-500 rounded">
                     <p><strong>Email:</strong> null</p>
                 </div>
-                <div class="bg-red-500 text-white p-2 rounded">
+                <div class="p-2 text-white bg-red-500 rounded">
                     <p><strong>Role:</strong> null</p>
                 </div>
                 <% } %>
