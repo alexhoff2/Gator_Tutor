@@ -2,51 +2,64 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us - Team Project</title>
-    <link
-      rel="preload"
-      href="/css/style.css"
-      as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript><link rel="stylesheet" href="/css/style.css" /></noscript>
-  </head>
-  <body>
+    <title>About GatorTutor - SFSU Tutoring Platform</title>
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gray-100">
     <!-- Include the header partial -->
     <%- include('partials/header') %>
 
-    <main>
-      <!-- /path/to/your-file.html -->
-      <!-- About Us Section -->
-      <section id="about-us" class="py-20 bg-white">
-        <div class="container px-6 mx-auto">
-          <h2 class="mb-12 text-3xl font-bold text-center section-heading">
-            About Us
-          </h2>
-          <div
-            class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
-          >
-            <%- include('partials/team-member', { link: '/alex-hoff', image:
-            '/images/Alexander-Hoff.png', name: 'Alex Hoff', role: 'Team Lead'
-            }) %> <%- include('partials/team-member', { link: '/austin-ng',
-            image: '/images/Austin-Ng.png', name: 'Austin Ng', role: 'Backend
-            Lead' }) %> <%- include('partials/team-member', { link:
-            '/jack-richards', image: '/images/Jack-Richards.png', name: 'Jack
-            Richards', role: 'Front-End' }) %> <%-
-            include('partials/team-member', { link: '/dylan-lee', image:
-            '/images/Dylan-Lee.png', name: 'Dylan Lee', role: 'GitHub Master' })
-            %> <%- include('partials/team-member', { link: '/dalan-moore',
-            image: '/images/Dalan-Moore.png', name: 'Dalan Moore', role:
-            'Front-End' }) %>
-          </div>
-        </div>
-      </section>
+    <main class="pt-16">
+        <!-- About GatorTutor Section -->
+        <section class="py-20 bg-white">
+            <div class="container px-6 mx-auto">
+                <h1 class="mb-8 text-4xl font-bold text-center">About GatorTutor</h1>
+                <p class="mb-8 text-lg text-center text-gray-600">
+                    GatorTutor is an innovative tutoring platform exclusively for SFSU students. Our mission is to connect students with expert tutors to enhance academic success and foster a collaborative learning environment.
+                </p>
+                <div class="mb-12 text-center">
+                    <a href="/tutors" class="px-6 py-3 text-white bg-indigo-600 rounded-full hover:bg-indigo-700">Find a Tutor</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="about-us" class="py-20 bg-gray-100">
+            <div class="container px-6 mx-auto">
+                <h2 class="mb-12 text-3xl font-bold text-center">Our Team</h2>
+                <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                    <%- include('partials/team-member', { link: '/alex-hoff', image: '/images/Alexander-Hoff.png', name: 'Alex Hoff', role: 'Team Lead' }) %>
+                    <%- include('partials/team-member', { link: '/austin-ng', image: '/images/Austin-Ng.png', name: 'Austin Ng', role: 'Backend Lead' }) %>
+                    <%- include('partials/team-member', { link: '/jack-richards', image: '/images/Jack-Richards.png', name: 'Jack Richards', role: 'Front-End' }) %>
+                    <%- include('partials/team-member', { link: '/dylan-lee', image: '/images/Dylan-Lee.png', name: 'Dylan Lee', role: 'GitHub Master' }) %>
+                    <%- include('partials/team-member', { link: '/dalan-moore', image: '/images/Dalan-Moore.png', name: 'Dalan Moore', role: 'Front-End' }) %>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Information Section -->
+        <section class="py-20 bg-white">
+            <div class="container px-6 mx-auto">
+                <h2 class="mb-8 text-3xl font-bold text-center">About the Project</h2>
+                <p class="mb-4 text-lg text-center text-gray-600">
+                    This project is part of the SFSU Software Engineering course CSC 648-848, Fall 2024.
+                </p>
+                <p class="text-lg text-center text-gray-600">
+                    It serves as a demonstration of our team's skills in web development, database management, and project collaboration.
+                </p>
+            </div>
+        </section>
     </main>
 
     <!-- Include the footer partial -->
     <%- include('partials/footer') %>
-  </body>
+</body>
 </html>
