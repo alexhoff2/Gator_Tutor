@@ -1,16 +1,17 @@
-const pool = require("../config/db");
+const { getPool } = require("../config/db");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
+const SubjectsModel = require("../models/subjectsModel");
 
 // Render register Page
 exports.getregisterPage = async (req, res) => {
   console.log("authController.getregisterPage called");
   try {
-    const [subjects] = await pool.query("SELECT * FROM subjects");
+    const subjects = await SubjectsModel.getAllSubjects();
     res.render("register", { subjects });
   } catch (error) {
     console.error("Error fetching subjects:", error);
-    res.status(500).send("Server Error");
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -23,9 +24,13 @@ exports.postregisterForm = [
   // Validation Middleware
   body("email")
     .isEmail()
-    .withMessage("Invalid email address")
-    .matches(/@sfsu\.edu$/)
-    .withMessage("Email must be an SFSU email"),
+    .withMessage("Please enter a valid email")
+    .custom((value) => {
+      if (!value.endsWith("@sfsu.edu") && !value.endsWith("@mail.sfsu.edu")) {
+        throw new Error("Email must be an SFSU email");
+      }
+      return true;
+    }),
   body("name").notEmpty().withMessage("Name is required").trim().escape(),
   body("password")
     .isLength({ min: 6 })
@@ -38,15 +43,22 @@ exports.postregisterForm = [
 
     if (!errors.isEmpty()) {
       console.log("Validation errors:", errors.array());
-      const [allSubjects] = await pool.query("SELECT * FROM subjects");
-      return res.status(400).render("register", {
-        subjects: allSubjects,
-        errors: errors.array(),
-        formData: { email, name },
-      });
+      try {
+        const subjects = await SubjectsModel.getAllSubjects();
+        return res.status(400).render("register", {
+          subjects,
+          errors: errors.array(),
+          formData: { email, name },
+        });
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+        return res.status(500).send("Internal Server Error");
+      }
     }
 
     try {
+      const pool = await getPool();
+
       // Check if email already exists
       const [existingUsers] = await pool.query(
         "SELECT * FROM users WHERE email = ?",
@@ -78,12 +90,17 @@ exports.postregisterForm = [
       }
     } catch (error) {
       console.error("Registration error:", error.message);
-      const [allSubjects] = await pool.query("SELECT * FROM subjects");
-      res.status(500).render("register", {
-        subjects: allSubjects,
-        errors: [{ msg: error.message }],
-        formData: { email, name },
-      });
+      try {
+        const subjects = await SubjectsModel.getAllSubjects();
+        res.status(500).render("register", {
+          subjects,
+          errors: [{ msg: error.message }],
+          formData: { email, name },
+        });
+      } catch (subjectsError) {
+        console.error("Error fetching subjects:", subjectsError);
+        res.status(500).send("Internal Server Error");
+      }
     }
   },
 ];
@@ -96,39 +113,50 @@ exports.getLoginPage = (req, res) => {
 
 // Handle Login Form Submission
 exports.postLoginForm = [
-  (req, res, next) => {
-    console.log("authController.postLoginForm middleware called");
-    next();
-  },
-  body("email").isEmail().withMessage("Invalid email address"),
+  // Validation middleware
+  body("email")
+    .isEmail()
+    .withMessage("Please enter a valid email")
+    .custom((value) => {
+      if (!value.endsWith("@sfsu.edu") && !value.endsWith("@mail.sfsu.edu")) {
+        throw new Error("Email must be an SFSU email");
+      }
+      return true;
+    }),
   body("password").notEmpty().withMessage("Password is required"),
+
   async (req, res) => {
     console.log("authController.postLoginForm async function called");
     const errors = validationResult(req);
-    const { email, password } = req.body;
-
-    console.log("Login attempt:", { email, password });
-
     if (!errors.isEmpty()) {
-      console.log("Validation errors:", errors.array());
-      return res.status(400).render("login", { errors: errors.array() });
+      return res.status(400).render("login", {
+        errors: errors.array(),
+      });
     }
 
+    const { email, password } = req.body;
+    console.log("Login attempt:", { email, password });
+
     try {
+      const pool = await getPool(); // Get the pool
+
+      // Find user by email
       const [users] = await pool.query("SELECT * FROM users WHERE email = ?", [
         email,
       ]);
-      if (users.length === 0) {
+      const user = users[0];
+
+      if (!user) {
         throw new Error("Invalid email or password");
       }
 
-      const user = users[0];
+      // Check password
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         throw new Error("Invalid email or password");
       }
 
-      // Store user info in session
+      // Set user session
       req.session.user = {
         id: user.id,
         name: user.username,
@@ -136,10 +164,50 @@ exports.postLoginForm = [
         role: user.role,
       };
 
-      res.redirect("/");
+      res.redirect("/"); // Redirect to home page after successful login
     } catch (error) {
-      console.log("Login error:", error.message);
-      res.status(400).render("login", { errors: [{ msg: error.message }] });
+      console.error("Login error:", error.message);
+      res.status(400).render("login", {
+        errors: [{ msg: error.message }],
+      });
     }
   },
 ];
+
+exports.postRegisterForm = async (req, res) => {
+  try {
+    const { username, email, password, role, subjects } = req.body;
+    // ... existing code to handle registration ...
+
+    if (role === "tutor") {
+      const tutorPost = {
+        user_id: newUser.id,
+        bio: req.body.bio,
+        availability: req.body.availability,
+        hourly_rate: req.body.hourly_rate,
+        contact_info: req.body.contact_info,
+      };
+      const newTutorPost = await TutorPostsModel.create(tutorPost);
+
+      // Save subjects to tutor_subjects table
+      const subjectNames = subjects.split(",");
+      for (const subjectName of subjectNames) {
+        const [subject] = await db.query(
+          "SELECT id FROM subjects WHERE subject_name = ?",
+          [subjectName.trim()]
+        );
+        if (subject.length > 0) {
+          await db.query(
+            "INSERT INTO tutor_subjects (tutor_id, subject_id) VALUES (?, ?)",
+            [newTutorPost.id, subject[0].id]
+          );
+        }
+      }
+    }
+
+    res.redirect("/login");
+  } catch (error) {
+    console.log("Registration error:", error.message);
+    res.status(400).render("register", { errors: [{ msg: error.message }] });
+  }
+};
