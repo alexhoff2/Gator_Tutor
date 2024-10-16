@@ -1,0 +1,93 @@
+<div id="debug-panel" class="fixed top-0 right-0 z-50 h-full overflow-y-auto text-white transition-transform duration-300 transform translate-x-full bg-gray-900 shadow-lg w-96">
+  <button id="debug-toggle" class="absolute top-0 left-0 p-2 -ml-10 text-white bg-gray-800 rounded-l">
+    Debug
+  </button>
+  
+  <div class="p-4">
+    <h2 class="mb-4 text-2xl font-bold text-green-400">Controller Tester</h2>
+    
+    <div class="mb-6">
+      <h3 class="mb-2 text-xl font-semibold text-blue-300">Select Controller</h3>
+      <select id="controller-select" class="w-full p-2 mb-2 text-gray-900 bg-gray-100 rounded">
+        <option value="">Select a controller</option>
+        <option value="auth">Auth Controller</option>
+        <option value="users">Users Controller</option>
+        <option value="tutors">Tutors Controller</option>
+        <option value="messages">Messages Controller</option>
+        <option value="subjects">Subjects Controller</option>
+      </select>
+      <select id="method-select" class="w-full p-2 mb-2 text-gray-900 bg-gray-100 rounded">
+        <option value="">Select a method</option>
+      </select>
+      <button id="test-controller" class="w-full p-2 text-white bg-blue-600 rounded hover:bg-blue-700">
+        Test Controller Method
+      </button>
+    </div>
+
+    <div id="debug-content" class="space-y-4">
+      <p class="text-red-400">Select a controller and method to test.</p>
+    </div>
+
+    <% if (typeof req !== 'undefined') { %>
+      <div class="p-3 mt-4 bg-gray-800 rounded-md">
+        <h3 class="mb-2 text-lg font-semibold text-blue-300">Request Info</h3>
+        <pre class="overflow-x-auto text-xs text-green-200 break-words whitespace-pre-wrap">
+Method: <%= req.method %>
+URL: <%= req.url %>
+Query: <%= JSON.stringify(req.query, null, 2) %>
+Params: <%= JSON.stringify(req.params, null, 2) %>
+        </pre>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  const controllerMethods = {
+    auth: ['getregisterPage', 'postregisterForm'],
+    users: ['becomeTutor', 'checkTutorPost', 'getProfile', 'postEditTutorProfile'],
+    tutors: ['listTutors', 'getTutorProfile'],
+    messages: ['sendMessage', 'getMessages'],
+    subjects: ['fetchAllSubjects']
+  };
+
+  document.getElementById('controller-select').addEventListener('change', function() {
+    const controller = this.value;
+    const methodSelect = document.getElementById('method-select');
+    methodSelect.innerHTML = '<option value="">Select a method</option>';
+    if (controller && controllerMethods[controller]) {
+      controllerMethods[controller].forEach(method => {
+        const option = document.createElement('option');
+        option.value = method;
+        option.textContent = method;
+        methodSelect.appendChild(option);
+      });
+    }
+  });
+
+  document.getElementById('test-controller').addEventListener('click', function() {
+    const controller = document.getElementById('controller-select').value;
+    const method = document.getElementById('method-select').value;
+    if (controller && method) {
+      fetch(`/debug/${controller}/${method}`)
+        .then(response => response.json())
+        .then(data => {
+          const debugContent = document.getElementById('debug-content');
+          const div = document.createElement('div');
+          div.className = 'p-3 bg-gray-800 rounded-md';
+          div.innerHTML = `
+            <h3 class="mb-2 text-lg font-semibold text-blue-300">${controller}.${method} Result</h3>
+            <pre class="overflow-x-auto text-xs text-green-200 break-words whitespace-pre-wrap">${JSON.stringify(data, null, 2)}</pre>
+          `;
+          debugContent.innerHTML = '';
+          debugContent.appendChild(div);
+        })
+        .catch(error => console.error('Error testing controller method:', error));
+    }
+  });
+
+  document.getElementById('debug-toggle').addEventListener('click', function() {
+    const panel = document.getElementById('debug-panel');
+    panel.classList.toggle('translate-x-full');
+  });
+</script>

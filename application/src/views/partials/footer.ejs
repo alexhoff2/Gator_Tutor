@@ -1,0 +1,95 @@
+        <!-- Footer -->
+        <footer id="sticky-footer" class="bg-white border-t border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+            <div class="w-full max-w-screen-xl px-4 py-8 mx-auto sm:px-6 lg:px-8 lg:py-12">
+                <div class="mb-8 text-center">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                        SFSU Software Engineering Project CSC 648-848, Fall 2024. For Demonstration Only
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
+                    <!-- Logo and Description -->
+                    <div class="col-span-1 lg:col-span-2">
+                        <img src="/images/logoIcon.png" alt="GatorTutor Logo" class="h-10 mb-4">
+                        <p class="mb-4 text-gray-600 dark:text-gray-400">
+                            GatorTutor connects SFSU students with expert tutors to help them excel in their studies.
+                        </p>
+                        <p class="mb-4 text-gray-600 dark:text-gray-400">
+                            This is an open-source school project. View the source code on 
+                            <a href="https://github.com/CSC-648-SFSU/csc648-fa24-03-team06" 
+                               class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                               target="_blank" rel="noopener noreferrer">
+                                GitHub
+                            </a>.
+                        </p>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div>
+                        <h3 class="mb-4 text-sm font-semibold text-gray-900 uppercase dark:text-white">Quick Links</h3>
+                        <ul class="space-y-2">
+                            <li><a href="/" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Home</a></li>
+                            <li><a href="/tutors" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Find a Tutor</a></li>
+                            <li><a href="/become-a-tutor" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Become a Tutor</a></li>
+                            <li><a href="/about" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">About Us</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Support -->
+                    <div>
+                        <h3 class="mb-4 text-sm font-semibold text-gray-900 uppercase dark:text-white">Support</h3>
+                        <ul class="space-y-2">
+                            <li><a href="/faq" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">FAQ</a></li>
+                            <li><a href="/contact" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Contact Us</a></li>
+                            <li><a href="/privacy-policy" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Privacy Policy</a></li>
+                            <li><a href="/terms-of-service" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr class="my-6 border-gray-200 dark:border-gray-700">
+
+                <div class="flex flex-col items-center justify-between sm:flex-row">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">© 2024 GatorTutor. All rights reserved.</p>
+                    <p class="mt-4 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+                        Designed by GatorTutor Team for SFSU CSC 648-848
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    #sticky-footer {
+        margin-top: auto;
+    }
+</style>
+
+<script>
+    function adjustFooter() {
+        const footer = document.getElementById('sticky-footer');
+        const bodyHeight = document.body.offsetHeight;
+        const windowHeight = window.innerHeight;
+        
+        if (bodyHeight < windowHeight) {
+            footer.style.position = 'fixed';
+            footer.style.bottom = '0';
+            footer.style.left = '0';
+            footer.style.right = '0';
+        } else {
+            footer.style.position = 'static';
+        }
+    }
+
+    window.addEventListener('load', adjustFooter);
+    window.addEventListener('resize', adjustFooter);
+
+    // If you have dynamic content that might change the page height, call adjustFooter() after the content changes
+    // For example: 
+    // document.addEventListener('DOMContentLoaded', adjustFooter);
+    // Or after an AJAX call that adds content to the page
+</script>
