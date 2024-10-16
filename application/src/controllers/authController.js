@@ -17,10 +17,6 @@ exports.getregisterPage = async (req, res) => {
 
 // Handle register Form Submission
 exports.postregisterForm = [
-  (req, res, next) => {
-    console.log("authController.postregisterForm middleware called");
-    next();
-  },
   // Validation Middleware
   body("email")
     .isEmail()
@@ -35,74 +31,6 @@ exports.postregisterForm = [
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters"),
-  async (req, res) => {
-    console.log("authController.postregisterForm async function called");
-    const errors = validationResult(req);
-    const { role } = req.body; // Extract from body
-    const { email, name, password } = req.body;
-
-    if (!errors.isEmpty()) {
-      console.log("Validation errors:", errors.array());
-      try {
-        const subjects = await SubjectsModel.getAllSubjects();
-        return res.status(400).render("register", {
-          subjects,
-          errors: errors.array(),
-          formData: { email, name },
-        });
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
-        return res.status(500).send("Internal Server Error");
-      }
-    }
-
-    try {
-      const pool = await getPool();
-
-      // Check if email already exists
-      const [existingUsers] = await pool.query(
-        "SELECT * FROM users WHERE email = ?",
-        [email]
-      );
-      if (existingUsers.length > 0) {
-        throw new Error("Email already in use");
-      }
-
-      // Hash Password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Insert User
-      const [result] = await pool.query(
-        "INSERT INTO users (username, email, password, role, is_tutor) VALUES (?, ?, ?, ?, ?)",
-        [name, email, hashedPassword, role, role === "tutor" ? 1 : 0]
-      );
-
-      const userId = result.insertId;
-
-      // Store user info in session
-      req.session.user = { id: userId, name, email, role };
-
-      // Redirect based on role
-      if (role === "tutor") {
-        res.redirect("/become-a-tutor");
-      } else {
-        res.redirect("/");
-      }
-    } catch (error) {
-      console.error("Registration error:", error.message);
-      try {
-        const subjects = await SubjectsModel.getAllSubjects();
-        res.status(500).render("register", {
-          subjects,
-          errors: [{ msg: error.message }],
-          formData: { email, name },
-        });
-      } catch (subjectsError) {
-        console.error("Error fetching subjects:", subjectsError);
-        res.status(500).send("Internal Server Error");
-      }
-    }
-  },
 ];
 
 // Render Login Page

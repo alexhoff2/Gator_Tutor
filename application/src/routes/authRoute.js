@@ -3,7 +3,7 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 
 // GET register Page
-router.get("/register", authController.getregisterPage);
+router.get("/auth/getregisterPage", authController.getregisterPage);
 
 // POST register Form
 router.post("/register", authController.postregisterForm);
