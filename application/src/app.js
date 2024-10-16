@@ -61,6 +61,10 @@ app.use("/tutors", tutorsRoute);
 // Use Messages Route
 app.use("/messages", messagesRoutes);
 
+// Use Users Route
+const usersRoute = require("./routes/usersRoute");
+app.use("/users", usersRoute);
+
 // Define team members data
 const teamMembers = {
   "alex-hoff": {
@@ -106,6 +110,7 @@ app.get("/about", (req, res) => {
   res.render("about", { user: req.session.user }); // Pass user info to the view
 });
 
+// Dynamic route for team members
 app.get("/:memberId", (req, res) => {
   const memberId = req.params.memberId.toLowerCase();
   const member = teamMembers[memberId];
