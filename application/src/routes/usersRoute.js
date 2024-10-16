@@ -45,6 +45,17 @@ const upload = multer({
   },
 });
 
+// Example of adding error handling for undefined controller methods
+function safeRouteHandler(handler) {
+  return (req, res, next) => {
+    if (typeof handler !== "function") {
+      console.error("Route handler is not a function:", handler);
+      return res.status(500).send("Internal Server Error");
+    }
+    handler(req, res, next);
+  };
+}
+
 // Route to handle form submission from become-a-tutor.ejs
 router.post(
   "/become-a-tutor",
@@ -52,7 +63,7 @@ router.post(
     { name: "profilePhoto", maxCount: 1 },
     { name: "profileVideo", maxCount: 1 },
   ]),
-  usersController.becomeTutor
+  safeRouteHandler(usersController.becomeTutor)
 );
 
 // Route for the "become a tutor" page
@@ -78,5 +89,31 @@ router.post(
   messagesController.sendMessage
 );
 router.get("/messages", ensureAuthenticated, messagesController.getMessages);
+
+// Profile route
+router.get("/profile", ensureAuthenticated, usersController.getProfile);
+
+// Route for changing password
+router.post(
+  "/change-password",
+  ensureAuthenticated,
+  usersController.changePassword
+);
+
+// Route for editing tutor profile
+router.get(
+  "/edit-tutor-profile",
+  ensureAuthenticated,
+  usersController.getEditTutorProfile
+);
+router.post(
+  "/edit-tutor-profile",
+  ensureAuthenticated,
+  upload.fields([
+    { name: "profilePhoto", maxCount: 1 },
+    { name: "profileVideo", maxCount: 1 },
+  ]),
+  safeRouteHandler(usersController.postEditTutorProfile)
+);
 
 module.exports = router;
