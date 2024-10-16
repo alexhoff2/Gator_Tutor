@@ -1,5 +1,5 @@
         <!-- Footer -->
-        <footer class="mt-auto bg-white border-t border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+        <footer id="sticky-footer" class="bg-white border-t border-gray-200 dark:bg-gray-900 dark:border-gray-700">
             <div class="w-full max-w-screen-xl px-4 py-8 mx-auto sm:px-6 lg:px-8 lg:py-12">
                 <div class="mb-8 text-center">
                     <p class="text-sm font-semibold text-gray-900 dark:text-white">
@@ -57,3 +57,39 @@
                 </div>
             </div>
         </footer>
+
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    #sticky-footer {
+        margin-top: auto;
+    }
+</style>
+
+<script>
+    function adjustFooter() {
+        const footer = document.getElementById('sticky-footer');
+        const bodyHeight = document.body.offsetHeight;
+        const windowHeight = window.innerHeight;
+        
+        if (bodyHeight < windowHeight) {
+            footer.style.position = 'fixed';
+            footer.style.bottom = '0';
+            footer.style.left = '0';
+            footer.style.right = '0';
+        } else {
+            footer.style.position = 'static';
+        }
+    }
+
+    window.addEventListener('load', adjustFooter);
+    window.addEventListener('resize', adjustFooter);
+
+    // If you have dynamic content that might change the page height, call adjustFooter() after the content changes
+    // For example: 
+    // document.addEventListener('DOMContentLoaded', adjustFooter);
+    // Or after an AJAX call that adds content to the page
+</script>

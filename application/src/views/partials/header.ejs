@@ -1,7 +1,10 @@
 <!-- application/src/views/partials/header.ejs -->
 <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-xl">
   <nav class="container flex items-center justify-between px-4 py-2 mx-auto">
-    <a href="/" class="text-2xl font-bold text-indigo-600">GatorTutor</a>
+    <div class="flex flex-col">
+      <a href="/" class="text-2xl font-bold text-indigo-600">GatorTutor</a>
+      <span class="text-[8px] text-gray-500 leading-tight">SFSU Software Engineering Project CSC 648-848, Fall 2024. For Demonstration Only</span>
+    </div>
 
     <!-- Refined search bar -->
     <div class="flex-grow max-w-2xl mx-4">
@@ -23,47 +26,32 @@
         </button>
       </form>
     </div>
-
+    <%- include('debugbox', { req: typeof req !== 'undefined' ? req : undefined }) %>
+    
     <!-- Navigation links -->
-    <div class="flex items-center space-x-6">
+    <div class="flex items-center space-x-4">
       <a href="/tutors" class="text-gray-800 navbar-item hover:text-indigo-600">Find a Tutor</a>
-      <a href="/become-a-tutor" class="text-gray-800 navbar-item hover:text-indigo-600">Become a Tutor</a>
-      <% if (user) { %>
-        <div class="relative" x-data="{ open: false }">
-          <button 
-            @click="open = !open" 
-            class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            <span class="mr-2"><%= user.username %></span>
-            <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+      <% if (typeof user === 'undefined' || !user || !user.isTutor) { %>
+        <a href="/become-a-tutor" class="text-gray-800 navbar-item hover:text-indigo-600">Become a Tutor</a>
+      <% } %>
+      <% if (typeof user !== 'undefined' && user) { %>
+        <div class="relative group">
+          <a href="/profile" class="flex items-center space-x-1 text-gray-800 hover:text-indigo-600">
+            <span><%= user.email || 'Profile' %></span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
-          </button>
-          <div 
-            x-show="open" 
-            @click.away="open = false" 
-            class="absolute right-0 w-48 py-1 mt-2 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            role="menu" 
-            aria-orientation="vertical" 
-            aria-labelledby="user-menu"
-          >
-            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Profile</a>
-            <a href="/messages" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-              <i class="mr-2 fas fa-envelope"></i>Messages
-            </a>
-            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign Out</a>
+          </a>
+          <div class="absolute right-0 hidden pt-2 group-hover:block">
+            <div class="w-48 py-2 bg-white rounded-md shadow-xl">
+              <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white">Profile</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-500 hover:text-white">Sign Out</a>
+            </div>
           </div>
         </div>
-        <% } else { %>
-          <a href="/login" class="px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700">Login</a>
-          <% } %>
-        </div>
-      </nav>
-    </header>
-    <!-- Add these scripts at the end of the body -->
-    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-    <script>
-      const subjectsData = <%- JSON.stringify(subjects) %>;
-      </script>
-<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-<script src="/js/header-search.js"></script>
+      <% } else { %>
+        <a href="/login" class="px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700">Login</a>
+      <% } %>
+    </div>
+  </nav>
+</header>
