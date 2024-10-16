@@ -21,6 +21,7 @@
     </style>
     <link rel="stylesheet" href="/css/tailwind.css" />
     <link rel="stylesheet" href="/css/custom.css" />
+    <link rel="stylesheet" href="/css/animations.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
@@ -30,7 +31,7 @@
 <body class="bg-gray-50">
     <%- include('partials/header') %>
 
-    <main class="pt-24 pb-16">
+    <main id="page-content" class="pt-24 pb-16">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <h1 class="mb-8 text-3xl font-bold text-gray-900">Find Your Perfect Tutor</h1>
             
@@ -128,6 +129,23 @@
         // Pass subjects data to JavaScript
         const subjectsData = <%- JSON.stringify(subjects) %>;
         console.log("Subjects data:", subjectsData);
+
+        // Add this new script for handling tutor profile links
+        document.querySelectorAll('a[href^="/tutors/"]').forEach(link => {
+            link.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const url = link.getAttribute('href');
+                
+                // Start exit animation
+                document.getElementById('page-content').classList.add('page-transition-exit-active');
+                
+                // Wait for exit animation to complete
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // Navigate to the new page
+                window.location.href = url;
+            });
+        });
     </script>
     <script src="/js/tutors.js"></script>
 </body>
