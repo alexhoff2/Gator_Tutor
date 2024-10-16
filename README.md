@@ -19,9 +19,9 @@
 #### Team Members:
 - **Alex Hoff (Team Lead):** Leading the team and organizing project milestones.
 - **Austin Ng (Backend Lead):** Responsible for server-side logic and database management.
-- **Jack Richards (?):** 
-- **Dylan Lee (GitHub Master):** Organizing and maintaining GitHub repository, overseeing version control.
-- **Dalan Moore (?):**
+- **Jack Richards (Programming Lead):** Overlooking structures and code inside of the Project.
+- **Dylan Faulder (GitHub Master):** Organizing and maintaining GitHub repository, overseeing version control.
+- **Dalan Choy (Front End Lead):** Desinging and overlooking the front end.
 
 #### Project Overview:
 We are working on a web-based application that facilitates tutoring services at SFSU, designed exclusively for students, faculty, and staff. Our mission is to create a simple, secure, and user-friendly platform that helps students find and connect with tutors on campus.
