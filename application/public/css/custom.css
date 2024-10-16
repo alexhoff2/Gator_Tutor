@@ -1,9 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+/* Remove or comment out the Poppins import */
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"); */
 
-/* Custom CSS styles */
-body {
+/* Remove or comment out the body font-family declaration */
+/* body {
   font-family: "Poppins", sans-serif;
-}
+} */
 
 .gradient-bg {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -161,4 +162,22 @@ body {
 
   /* Optional: Add other Tailwind-like styles using @apply if using Tailwind with PostCSS */
   /* @apply flex items-center px-3 py-1 mb-2 mr-2 text-white bg-indigo-600 rounded-lg; */
+}
+
+.page-transition-enter {
+  opacity: 0;
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-in;
 }
