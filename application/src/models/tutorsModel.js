@@ -3,9 +3,9 @@ const { getPool } = require("../config/db");
 const TutorsModel = {
   create: async (userData) => {
     const pool = await getPool(); // Ensure the pool is ready
-    const { username, email, password, role, is_tutor } = userData;
+    const { username, email, password} = userData;
     const query = `
-      INSERT INTO users (username, email, password, role, is_tutor) 
+      INSERT INTO users (username, email, password) 
       VALUES (?, ?, ?, ?, ?)
     `;
     try {
@@ -13,8 +13,6 @@ const TutorsModel = {
         username,
         email,
         password,
-        role,
-        is_tutor,
       ]);
       return result.insertId;
     } catch (err) {
@@ -95,7 +93,6 @@ const TutorsModel = {
       JOIN tutor_posts tp ON u.id = tp.user_id
       LEFT JOIN tutor_subjects ts ON tp.id = ts.tutor_id
       LEFT JOIN subjects s ON ts.subject_id = s.id
-      WHERE u.is_tutor = 1
     `;
 
     const queryParams = [];
@@ -156,7 +153,7 @@ const TutorsModel = {
       JOIN tutor_posts tp ON u.id = tp.user_id
       LEFT JOIN tutor_subjects ts ON tp.id = ts.tutor_id
       LEFT JOIN subjects s ON ts.subject_id = s.id
-      WHERE u.id = ? AND u.is_tutor = 1
+      WHERE u.id = ?
       GROUP BY u.id
     `;
     try {
