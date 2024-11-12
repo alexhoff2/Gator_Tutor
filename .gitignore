@@ -1,6 +1,47 @@
+# Project Documentation & Sensitive Data
 /milestones/
 /credentials/
 /LICENSE
 /README.md
+
+# Application Dependencies & Build
 application/node_modules/
+application/.next/
+application/out/
+application/build/
+application/.vercel/
+application/coverage/
+
+# Environment & Config
 .env
+application/.env*
+application/.env.local
+application/.env.development
+application/.env.production
+
+# Package Management
+application/.pnp
+application/.pnp.*
+application/yarn/*
+!application/yarn/patches
+!application/yarn/plugins
+!application/yarn/releases
+!application/yarn/versions
+application/package-lock.json
+
+# Debug & Logs
+application/npm-debug.log*
+application/yarn-debug.log*
+application/yarn-error.log*
+
+# TypeScript
+application/*.tsbuildinfo
+application/next-env.d.ts
+
+# System Files
+.DS_Store
+application/.DS_Store
+application/*.pem
+
+# Docker
+application/docker-compose.override.yml
