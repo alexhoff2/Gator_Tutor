@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ClassSection {
+  id                 Int      @id @default(autoincrement())
+  course             String   @db.VarChar(20)
+  type               String?  @db.VarChar(10)
+  title              String   @db.VarChar(255)
+  units              Int?
+  classNumber        Int?     @map("class_number")
+  instructionMode    String?  @map("instruction_mode") @db.VarChar(50)
+  instructor         String?  @db.VarChar(100)
+  section            String?  @db.VarChar(10)
+  createdAt          DateTime @default(now()) @map("created_at")
+  meetingDays        String?  @map("meeting_days") @db.VarChar(255)
+  meetingTime        String?  @map("meeting_time") @db.VarChar(255)
+  location           String?  @db.VarChar(255)
+  debug              Json?
+  rawSchedule        String?  @map("raw_schedule") @db.Text
+  instructorImageUrl String?  @map("instructor_image_url") @db.VarChar(255)
+
+  @@map("class_sections")
+}
+
+model Message {
+  id          Int       @id @default(autoincrement())
+  senderId    Int       @map("sender_id")
+  recipientId Int       @map("recipient_id")
+  tutorPostId Int       @map("tutor_post_id")
+  message     String    @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  readAt      DateTime? @map("read_at")
+  sender      User      @relation("SentMessages", fields: [senderId], references: [id])
+  recipient   User      @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  tutorPost   TutorPost @relation(fields: [tutorPostId], references: [id], onDelete: Cascade)
+
+  @@index([tutorPostId])
+  @@map("messages")
+}
+
+model Subject {
+  id            Int            @id @default(autoincrement())
+  subjectName   String         @map("subject_name") @db.VarChar(255)
+  tutorSubjects TutorSubject[]
+
+  @@map("subjects")
+}
+
+model TutorPost {
+  id            Int            @id @default(autoincrement())
+  userId        Int            @unique @map("user_id")
+  displayName   String         @map("display_name") @db.VarChar(255)
+  bio           String         @db.Text
+  availability  Json
+  hourlyRate    Decimal        @map("hourly_rate") @db.Decimal(10, 2)
+  contactInfo   String         @map("contact_info") @db.VarChar(255)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  profilePhoto  String?        @map("profile_photo") @db.VarChar(255)
+  profileVideo  String?        @map("profile_video") @db.VarChar(255)
+  resumePdf     String?        @map("resume_pdf") @db.VarChar(255)
+  experience    String?        @db.VarChar(255)
+  reviews       Int?
+  subjects      String?        @db.Text
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tutorSubjects TutorSubject[]
+  messages      Message[]
+
+  @@map("tutor_posts")
+}
+
+model TutorSubject {
+  tutorId   Int       @map("tutor_id")
+  subjectId Int       @map("subject_id")
+  tutor     TutorPost @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  subject   Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@id([tutorId, subjectId])
+  @@map("tutor_subjects")
+}
+
+model User {
+  id               Int        @id @default(autoincrement())
+  email            String     @unique @db.VarChar(255)
+  password         String     @db.VarChar(255)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  lastLogin        DateTime?  @map("last_login")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+  tutorPost        TutorPost?
+  sentMessages     Message[]  @relation("SentMessages")
+  receivedMessages Message[]  @relation("ReceivedMessages")
+
+  @@map("users")
+}

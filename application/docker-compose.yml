@@ -1,0 +1,51 @@
+# Docker Compose Configuration
+# ---------------------------
+# This file defines our application's services (like Lego pieces that make up our app):
+# 1. db: Our MySQL database
+# 2. web: Our Next.js application
+#
+# Think of it as a recipe that tells Docker how to run our application
+
+services:
+  # Database Service
+  # ---------------
+  # This runs MySQL to store all our app's data
+  db:
+    image: mysql:8.0                    # Use MySQL version 8.0
+    restart: unless-stopped             # Automatically restart if it crashes
+    environment:                        # Database settings (from .env file)
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:                            # Save data even if container restarts
+      - mysql_data:/var/lib/mysql
+    ports:                             # Allow connections to database
+      - "3306:3306"                    # Format: "computer-port:container-port"
+
+  # Web Application Service
+  # ----------------------
+  # This runs our Next.js application
+  web:
+    build:                             # How to build our application
+      context: .                       # Use files from current directory
+      dockerfile: Dockerfile           # Instructions for building the app
+      target: ${NODE_ENV:-development} # Use development by default
+    ports:                            
+      - "80:3000"                     # Access app on port 80 but run it on port 3000 inside the container
+    environment:                       # App settings (from .env file)
+      - NODE_ENV=${NODE_ENV:-development}
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+    volumes:                           # Volumes are directories shared with the container
+      - .:/app                        # Current directory -> /app
+      - /app/node_modules             # Don't overwrite node_modules
+      - /app/.next                    # Don't overwrite .next
+    depends_on:                        # Wait for database to start first
+      - db
+
+# Persistent Storage
+# -----------------
+# Keep database data even when containers restart
+volumes:
+  mysql_data:
