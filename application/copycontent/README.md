@@ -1,3 +1,0 @@
-# collect_project_files.py
-
-The `collect_project_files.py` script is designed to traverse a project directory, read the contents of all files, and write them into a single output file while respecting ignore patterns specified in a `.copycontentignore` file. It uses logging to provide detailed debug information about the files being processed and any errors encountered. The script is intended to be run from the command line and outputs the combined file contents to `combined_output.txt` in the same directory.
