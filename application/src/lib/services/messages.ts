@@ -81,3 +81,17 @@ export async function getUserMessages(userId: number) {
     throw error;
   }
 }
+
+//Sets message as read
+export async function markMessageAsRead(messageId: number) {
+  try {
+    const message = await prisma.message.update({
+      where: { id: messageId },
+      data: { readAt: new Date() },
+    });
+    return message;
+  } catch (error) {
+    console.error("Error marking message as read:", error);
+    throw error;
+  }
+}
