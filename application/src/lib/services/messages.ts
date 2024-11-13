@@ -81,4 +81,3 @@ export async function getUserMessages(userId: number) {
     throw error;
   }
 }
-
