@@ -1,8 +1,21 @@
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 
+/**
+ * Auth Utilities
+ *
+ * JWT (JSON Web Token) is a standard for securely transmitting user info:
+ * - It's encrypted (can't be tampered with)
+ * - Contains user data (like ID and email)
+ * - Has an expiration time
+ * - Signed with a secret key (so we know it's legitimate)
+ */
+
+
+// TextEncoder converts our secret key string into bytes
+// (JWT operations need bytes, not strings)
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "your-secret-key"
+  process.env.JWT_SECRET || "your-secret-key" // !IMPORTANT: In production, this needs to be a real secret key in .env
 );
 
 
