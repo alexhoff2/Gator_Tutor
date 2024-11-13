@@ -38,8 +38,6 @@ export async function getSession() {
   if (!token) return null;
 
   try {
-
-
     // jwtVerify: Checks signature and expiration
     // Returns decoded payload if valid
     const verified = await jwtVerify(token, JWT_SECRET);
@@ -63,6 +61,8 @@ export async function requireAuth() {
 
   if (!session) {
     throw new Error("Unauthorized");
+
   }
+
   return session;
 }
