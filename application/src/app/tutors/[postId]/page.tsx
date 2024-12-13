@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { SendMessage } from "@/components/features/messages/send-message";
 import { getImagePath } from "@/lib/utils/images";
+import Image from "next/image";
 
 /**
  * Individual Tutor Profile Page
@@ -74,11 +75,13 @@ export default async function TutorProfilePage({ params }: PageProps) {
             <div className="flex flex-col md:flex-row gap-8">
               {/* Profile photo section */}
               <div>
-                <div className="rounded-xl overflow-hidden w-56 h-56">
-                  <img
+                <div className="rounded-xl overflow-hidden w-56 h-56 relative">
+                  <Image
                     src={getImagePath(tutorPost.profilePhoto)}
                     alt={tutorPost.displayName}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="224px"
                   />
                 </div>
               </div>

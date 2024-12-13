@@ -44,6 +44,7 @@ import { Check } from "lucide-react";
 import { useAuthProtection } from "@/lib/hooks/useAuthProtection";
 import { FormSkeleton } from "@/components/ui/skeletons";
 import { TutorFormStateService } from "@/lib/services/redirect-state";
+import Image from "next/image";
 
 /**
  * Create Tutor Form Component 🎓
@@ -308,7 +309,7 @@ export function CreateTutorForm() {
   useEffect(() => {
     const savedState = TutorFormStateService.load();
     if (savedState) {
-      console.log("Restoring form state:", savedState); // Debug log
+      console.log("Restoring form state:", savedState);
       form.reset(savedState.formData);
 
       if (savedState.hadFiles.profilePhoto) {
@@ -321,7 +322,7 @@ export function CreateTutorForm() {
         setNeedsReupload((prev) => ({ ...prev, resumePdf: true }));
       }
     }
-  }, []);
+  }, [form]);
 
   return (
     <Form {...form}>
@@ -356,11 +357,15 @@ export function CreateTutorForm() {
               <label className="cursor-pointer">
                 <div className="w-56 h-56 rounded-full bg-white border-2 border-dashed border-gray-300 flex flex-col items-center justify-center relative group">
                   {profilePhoto ? (
-                    <img
-                      src={URL.createObjectURL(profilePhoto)}
-                      alt="Profile"
-                      className="w-full h-full rounded-full object-cover"
-                    />
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={URL.createObjectURL(profilePhoto)}
+                        alt="Profile"
+                        fill
+                        className="rounded-full object-cover"
+                        sizes="224px"
+                      />
+                    </div>
                   ) : (
                     <>
                       <Icons.user className="w-28 h-28 text-gray-400 mb-3" />
