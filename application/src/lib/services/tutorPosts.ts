@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { TutorPost, TutorPostsResponse } from "@/lib/types/tutorPost";
-import { Prisma } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 /**
  * Tutor Posts Service
@@ -33,6 +33,7 @@ interface GetTutorPostsParams {
   subject?: string; // Filter by subject
   minPrice?: string; // Price range min
   maxPrice?: string; // Price range max
+  approvedOnly?: boolean; // Add this line
 }
 
 // This is our main search function! I am going to comment extensively because it's a bit complicated.
@@ -48,6 +49,7 @@ export async function getTutorPosts({
   subject, // Filter by subject (like "Math" or "Chemistry")
   minPrice, // Minimum price filter
   maxPrice, // Maximum price filter
+  approvedOnly = true, // Default to true - only show approved posts
 }: GetTutorPostsParams = {}): Promise<TutorPostsResponse> {
   try {
     // This is our search filter builder! We're using Prisma's AND array
@@ -61,6 +63,9 @@ export async function getTutorPosts({
     // So to start we have our where clause which is an AND of all our filters
     const where = {
       AND: [
+        // Only show approved posts by default
+        { isApproved: approvedOnly },
+
         // Text search: If there's search text, look for it in name OR bio
         // toLowerCase() makes the search case-insensitive
         q
@@ -87,10 +92,21 @@ export async function getTutorPosts({
             }
           : {},
 
-        // Price range: Simple gte (>=) and lte (<=) filters
-        // parseFloat converts the string prices to numbers
-        minPrice ? { hourlyRate: { gte: parseFloat(minPrice) } } : {},
-        maxPrice ? { hourlyRate: { lte: parseFloat(maxPrice) } } : {},
+        // Price range: Convert strings to Prisma.Decimal for comparison
+        minPrice
+          ? {
+              hourlyRate: {
+                gte: minPrice,
+              },
+            }
+          : {},
+        maxPrice
+          ? {
+              hourlyRate: {
+                lte: maxPrice,
+              },
+            }
+          : {},
       ],
     };
 
@@ -158,14 +174,6 @@ interface CreateTutorPostData {
   resumePdf?: string;
 }
 
-const debugPrismaTypes = () => {
-  console.log(
-    "Available TutorPost fields:",
-    Object.keys(Prisma.TutorPostScalarFieldEnum)
-  );
-};
-debugPrismaTypes();
-
 export async function createTutorPost(data: CreateTutorPostData) {
   // First, verify the user exists
   const user = await prisma.user.findUnique({
@@ -180,13 +188,14 @@ export async function createTutorPost(data: CreateTutorPostData) {
     userId: data.userId,
     displayName: data.displayName,
     bio: data.bio,
-    hourlyRate: new Prisma.Decimal(data.hourlyRate),
+    hourlyRate: data.hourlyRate,
     contactInfo: data.contactInfo,
     experience: data.experience || null,
     availability: data.availability,
     profilePhoto: data.profilePhoto || null,
     profileVideo: data.profileVideo || null,
     resumePdf: data.resumePdf || null,
+    isApproved: false,
     tutorSubjects: {
       create: {
         subject: {
@@ -197,8 +206,6 @@ export async function createTutorPost(data: CreateTutorPostData) {
       },
     },
   };
-
-  console.log("Type of tutorPostData:", tutorPostData);
 
   const tutorPost = await prisma.tutorPost.create({
     data: tutorPostData,
