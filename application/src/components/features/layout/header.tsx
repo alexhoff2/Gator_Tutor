@@ -368,6 +368,7 @@ export function Header() {
               defaultValue={currentSearch}
               onChange={handleSearchChange}
               placeholder="Search tutors, subjects, or keywords..."
+              maxLength={40}
               className="w-full h-10 px-4 text-[#4B2E83] focus:outline-none"
             />
             {isPending && (
