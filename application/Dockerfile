@@ -38,20 +38,26 @@ RUN npm ci --no-audit --no-fund --maxsockets=1
 # !IMPORTANT: This stage should never be used in production
 FROM base AS development
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-# Make sure TypeScript configs are copied and have correct permissions
-COPY tsconfig.json tsconfig.json
-COPY prisma/tsconfig.seed.json ./prisma/
-# Generate Prisma client with memory limits
-ENV NODE_OPTIONS="--max_old_space_size=384"
+
+# Copy only what's needed for development
+COPY package.json package-lock.json ./
+COPY prisma ./prisma
+COPY tsconfig.json ./
+
+# Install dependencies without memory limits
+RUN npm install
+
+# Generate Prisma client
 RUN npx prisma generate
+
+# Development specific settings
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV development
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
-EXPOSE 3000
-# Use nodemon for development to watch for changes
-RUN npm install -g nodemon
-CMD ["npm", "run", "dev"]
+
+# Use Turbopack for faster compilation (experimental but much faster)
+CMD ["npm", "run", "dev", "--", "--turbo"]
 
 
 # --- Builder Stage ---

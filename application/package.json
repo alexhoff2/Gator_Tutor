@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:turbo": "next dev --turbo",
     "build": "next build && cp -r .next/static .next/standalone/.next/static",
     "start": "next start",
     "lint": "next lint",
@@ -95,7 +96,7 @@
     "tailwindcss": "^3.4.14",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "5.7.2"
   },
   "eslintConfig": {
     "extends": [

@@ -1,4 +1,4 @@
-# Docker Compose Configuration (Development)
+# Docker Compose Configuration (Production)
 # ---------------------------------------
 services:
   db:
@@ -11,8 +11,11 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          memory: ${DB_MEMORY_LIMIT:-256M}
+          cpus: ${DB_CPU_LIMIT:-0.5}
     command: >
       --default-authentication-plugin=mysql_native_password
       --character-set-server=utf8mb4
@@ -25,27 +28,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
-    image: gatortutor-development
-    container_name: gatortutor-web-development
+      target: production
+    image: gatortutor-production
+    container_name: gatortutor-web-production
     ports:
       - "80:3000"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
-      - NODE_OPTIONS=--max_old_space_size=4096 --dns-result-order=ipv4first
+      - NODE_OPTIONS=--max_old_space_size=512
       - JWT_SECRET=${JWT_SECRET}
       - NEXT_TELEMETRY_DISABLED=1
-      - WATCHPACK_POLLING=false
-      - CHOKIDAR_USEPOLLING=false
-    volumes:
-      - ./node_modules:/app/node_modules
-      - ./.next:/app/.next
-      - ./prisma:/app/prisma
-      - ./public:/app/public
-      - ./src:/app/src
-      - .:/app:cached
+    deploy:
+      resources:
+        limits:
+          memory: ${WEB_MEMORY_LIMIT:-4096M}
+          cpus: ${WEB_CPU_LIMIT:-2}
     depends_on:
       - db
     restart: unless-stopped
