@@ -75,7 +75,7 @@ export function TutorList() {
    */
   return (
     <div className="space-y-4 w-full max-w-7xl mx-auto">
-      <div className="text-sm text-gray-500">
+      <div className="text-sm text-white">
         Found {posts.length} {posts.length === 1 ? "result" : "results"}
       </div>
 
