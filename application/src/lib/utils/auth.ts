@@ -6,6 +6,8 @@ import { jwtVerify } from "jose";
  * ------------------------------
  * @module lib/utils/auth
  * @description Handles JWT-based authentication and session management
+ * @lastModified 12-14-2024
+ * @author Jack Richards
  * 
  * Key Components:
  * - JWT token validation
