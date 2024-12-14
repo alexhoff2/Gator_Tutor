@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Prisma } from "@prisma/client";
 import { MessageList } from "@/components/features/dashboard/message-list";
+import { AlertCircle } from "lucide-react";
 
 /**
  * Dashboard Content Component
@@ -40,7 +41,7 @@ import { MessageList } from "@/components/features/dashboard/message-list";
 
 // Type definitions for data structure
 interface EditableTutorPost extends Omit<TutorPost, "hourlyRate"> {
-  hourlyRate: Prisma.Decimal;  // Special handling for decimal values
+  hourlyRate: number;  // Changed from Prisma.Decimal to number
 }
 
 interface EditingPost {
@@ -119,7 +120,7 @@ export function DashboardContent() {
             post.id.toString() === postId
               ? {
                   ...post,
-                  hourlyRate: new Prisma.Decimal(editingValues.hourlyRate),
+                  hourlyRate: parseFloat(editingValues.hourlyRate),
                   bio: editingValues.bio,
                   experience: editingValues.experience,
                 }
@@ -209,9 +210,20 @@ export function DashboardContent() {
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                     <div>
-                      <h3 className="text-xl font-semibold truncate">
-                        {post.displayName}
-                      </h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-xl font-semibold truncate">
+                          {post.displayName}
+                        </h3>
+                        {!post.isApproved && (
+                          <Badge 
+                            variant="secondary" 
+                            className="bg-yellow-100 text-yellow-800 border border-yellow-300"
+                          >
+                            <AlertCircle className="w-3 h-3 mr-1" />
+                            Under Review
+                          </Badge>
+                        )}
+                      </div>
                       <div className="flex flex-wrap gap-2 mt-1">
                         {post.tutorSubjects.map(({ subject }) => (
                           <Badge key={subject.id} variant="secondary">
@@ -256,6 +268,12 @@ export function DashboardContent() {
                       </Button>
                     )}
                   </div>
+
+                  {!post.isApproved && (
+                    <div className="mt-2 text-sm text-yellow-700 bg-yellow-50 p-2 rounded">
+                      Your post is currently under review and will be visible to students once approved (usually within 24 hours).
+                    </div>
+                  )}
                 </div>
               </div>
             </Card>

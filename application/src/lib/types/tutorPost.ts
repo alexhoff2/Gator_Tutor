@@ -1,5 +1,4 @@
 import type { Subject } from "./subject";
-import type { Prisma } from "@prisma/client";
 
 /**
  * Tutor Post Type
@@ -10,6 +9,7 @@ import type { Prisma } from "@prisma/client";
  * - Media (photo, video, resume)
  * - Experience & reviews
  * - Related data (user, subjects)
+ * - Approval status
  */
 export interface TutorPost {
   // Core post data
@@ -17,15 +17,16 @@ export interface TutorPost {
   userId: number;
   displayName: string;
   bio: string;
-  hourlyRate: Prisma.Decimal;
+  hourlyRate: number;
   contactInfo: string;
+  isApproved: boolean;
   
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
   
   // Schedule & availability
-  availability: Prisma.JsonValue;  // Stored as JSON in DB
+  availability: Record<string, any>;
   
   // Optional media files
   profilePhoto: string | null;     // URL to photo

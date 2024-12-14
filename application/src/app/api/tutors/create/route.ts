@@ -11,10 +11,10 @@ import { getSession } from "@/lib/utils/auth";
  * 1. Verify user is logged in
  * 2. Take their post data
  * 3. Add their user ID from session
- * 4. Create the post
+ * 4. Create the post (starts as unapproved)
  *
  * !IMPORTANT: User ID comes from session, not request
- * Why? So users can't create posts for others
+ * !NOTE: All posts start as unapproved and need admin review
  */
 export async function POST(request: Request) {
   try {
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     // Get the post details from request
     const data = await request.json();
 
-    // Create post with verified user ID
+    // Create post with verified user ID (isApproved defaults to false in schema)
     const tutorPost = await createTutorPost({
       userId: session.userId, // Safe: comes from session, not request
       ...data, // Everything else from their form
@@ -38,7 +38,8 @@ export async function POST(request: Request) {
 
     return Response.json({
       success: true,
-      message: "Tutor post created successfully",
+      message:
+        "Thank you for submitting your tutor profile! It is currently under review and will be visible once approved (usually within 24 hours).",
       post: tutorPost,
     });
   } catch (error) {
