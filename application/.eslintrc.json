@@ -1,0 +1,46 @@
+{
+  // ESLint Configuration File
+  // ------------------------
+  // This file configures ESLint, our code quality tool that:
+  // 1. Catches bugs and coding errors
+  // 2. Enforces consistent code style
+  // 3. Prevents common React/Next.js mistakes
+  // 4. Runs in VS Code and during builds
+
+  // Use Next.js recommended settings
+  // - Includes React best practices
+  // - Optimizes for performance (web vitals)
+  // - Prevents common Next.js mistakes
+  "extends": ["next/core-web-vitals"],
+
+  // Enable TypeScript linting support
+  // - Catches type-related errors
+  // - Provides better autocomplete
+  // - Works with our TS configuration
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+
+  // Custom rules for our project
+  "rules": {
+    // Fix JSX/TSX parsing for special characters
+    // Without this, certain characters in our components
+    // could break the build or cause React errors
+    "react/no-unescaped-entities": [
+      "error",
+      {
+        "forbid": [
+          // '>' breaks JSX if not escaped
+          {
+            "char": ">",
+            "alternatives": ["&gt;"]
+          },
+          // '}' breaks JSX if not escaped
+          {
+            "char": "}",
+            "alternatives": ["&#125;"]
+          }
+        ]
+      }
+    ]
+  }
+}

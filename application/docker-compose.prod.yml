@@ -1,0 +1,54 @@
+# Docker Compose Configuration (Production)
+# ---------------------------------------
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: ${DB_MEMORY_LIMIT:-256M}
+          cpus: ${DB_CPU_LIMIT:-0.5}
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --innodb-buffer-pool-size=128M
+      --max-connections=10
+      --performance-schema=OFF
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: gatortutor-production
+    container_name: gatortutor-web-production
+    ports:
+      - "80:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NODE_OPTIONS=--max_old_space_size=512
+      - JWT_SECRET=${JWT_SECRET}
+      - NEXT_TELEMETRY_DISABLED=1
+    deploy:
+      resources:
+        limits:
+          memory: ${WEB_MEMORY_LIMIT:-4096M}
+          cpus: ${WEB_CPU_LIMIT:-2}
+    depends_on:
+      - db
+    restart: unless-stopped
+    stop_grace_period: 10s
+
+volumes:
+  mysql_data:

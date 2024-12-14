@@ -1,80 +1,55 @@
+# Docker Compose Configuration (Development)
+# ---------------------------------------
 services:
-  app:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --innodb-buffer-pool-size=128M
+      --max-connections=10
+      --performance-schema=OFF
+
+  web:
     build:
       context: .
       dockerfile: Dockerfile
+      target: development
+    image: gatortutor-development
+    container_name: gatortutor-web-development
     ports:
-      - "3000:3000" # Host port 3000 mapped to container port 3000
+      - "80:3000"
     environment:
-      - DB_HOST=db
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - PORT=3000
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - app-network
-
-  app-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    command: ["node", "dev.js"]
-    ports:
-      - "3001:3001" # Host port 3001 mapped to container port 3001
-      - "3002:3002" # Host port 3002 mapped to container port 3002
-    environment:
-      - DB_HOST=db
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - PORT=3001
-      - BROWSER_SYNC_PORT=3002
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - app-network
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NODE_OPTIONS=--max_old_space_size=4096 --dns-result-order=ipv4first
+      - JWT_SECRET=${JWT_SECRET}
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=false
+      - CHOKIDAR_USEPOLLING=false
     volumes:
-      - ./src:/usr/src/src
-      - ./public:/usr/src/public
-
-  db:
-    image: mysql:8
-    container_name: mysql-db
-    env_file:
-      - .env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-    ports:
-      - "3306:3306"
-    volumes:
-      - db-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-p${DB_PASSWORD}",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+      - ./node_modules:/app/node_modules
+      - ./.next:/app/.next
+      - ./prisma:/app/prisma
+      - ./public:/app/public
+      - ./src:/app/src
+      - .:/app:cached
+    depends_on:
+      - db
+    restart: unless-stopped
+    stop_grace_period: 10s
 
 volumes:
-  db-data:
+  mysql_data:

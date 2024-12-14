@@ -1,31 +1,51 @@
-# Node modules
-/node_modules/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Environment variables (e.g., API keys, DB credentials)
-.env
+# Node.js dependencies
+/node_modules
 
-# Logs
-/logs
-*.log
+# Yarn
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-# OS-specific files
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+
+# Production build
+/build
+
+# Miscellaneous
 .DS_Store
-Thumbs.db
+*.pem
 
-# Dependency directories
-/application/node_modules/
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Milestones and credentials
-/milestones/
-/credentials/
+# Environment files
+.env*
+.env.local
+.env.development
+.env.production
 
-/LICENSE
-/README.md
+# Vercel deployment
+.vercel
 
-# Build outputs or cache
-dist/
-build/
-coverage/
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
 
-# Docker-related files (if any)
-docker-compose.override.yml
+# Prisma
+/prisma/.env # If you have a separate .env file for Prisma
+
+# Docker
+docker-compose.override.yml # If you use an override file for local development
