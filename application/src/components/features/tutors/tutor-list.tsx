@@ -74,10 +74,16 @@ export function TutorList() {
    * TODO: Add a "sort by" dropdown to the top of the list (in a new component probably)
    */
   return (
-    <div className="grid grid-cols-1 gap-2 md:gap-4 w-full max-w-7xl mx-auto">
-      {posts.map((tutor) => (
-        <TutorCard key={tutor.id} tutor={tutor} />
-      ))}
+    <div className="space-y-4 w-full max-w-7xl mx-auto">
+      <div className="text-sm text-gray-500">
+        Found {posts.length} {posts.length === 1 ? "result" : "results"}
+      </div>
+
+      <div className="grid grid-cols-1 gap-2 md:gap-4">
+        {posts.map((tutor) => (
+          <TutorCard key={tutor.id} tutor={tutor} />
+        ))}
+      </div>
     </div>
   );
 }
