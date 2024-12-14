@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
-// This tells TypeScript what type of configuration object we're creating
-
 const nextConfig = {
-  // Enable standalone output for optimized Docker builds
   output: "standalone",
-
-  // Configure allowed image sources for Next.js Image Optimization
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
+  productionBrowserSourceMaps: false,
+  swcMinify: true,
+  compress: true,
   images: {
+    minimumCacheTTL: 60,
     remotePatterns: [
       {
         protocol: "http",

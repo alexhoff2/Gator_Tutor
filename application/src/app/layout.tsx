@@ -1,6 +1,9 @@
 import { Header } from "@/components/features/layout/header";
 import { Toaster } from "sonner";
 import "./globals.css";
+import Image from "next/image";
+import { URLStateProvider } from "@/lib/context/url-state-context";
+import { Suspense } from "react";
 
 /**
  * Root Layout Component
@@ -22,48 +25,48 @@ export const metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode; // All page content will be passed as children
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className="min-h-screen">
-        <div className="relative min-h-screen">
-          {/* Fixed background image with z-index positioning */}
-          <div className="fixed inset-0 -z-10">
-            <img
-              src="/images/background-poster.jpg"
-              alt="Background"
-              className="object-cover w-full h-full"
+        <URLStateProvider>
+          <div className="relative min-h-screen">
+            {/* Background image */}
+            <div className="fixed inset-0 -z-10">
+              <Image
+                src="/images/background-poster.jpg"
+                alt="Background"
+                fill
+                priority
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
+            <Suspense fallback={<div className="h-16 bg-[#4B2E83]" />}>
+              <Header />
+            </Suspense>
+            <Suspense fallback={<div className="animate-pulse" />}>
+              {children}
+            </Suspense>
+            <Toaster
+              className="!fixed !top-[80px] !right-0"
+              expand={true}
+              richColors
+              closeButton
+              toastOptions={{
+                style: {
+                  maxWidth: "600px",
+                  padding: "16px",
+                  borderRadius: "12px",
+                  fontSize: "16px",
+                  boxShadow:
+                    "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+                },
+              }}
             />
           </div>
-
-          {/* Global header component */}
-          <Header /> {/* The header component itself */}
-
-          {/* Page content */}
-          {children} {/* The page content itself, it changes based on the page the user is on (pages are auto routed*/}
-
-          {/* Toast notification system
-              - Positioned below header (top-[80px])
-              - Uses sonner library for notifications
-              - Custom styling for consistent design */}
-          <Toaster
-            className="!fixed !top-[80px] !right-0" // !important used to override default styles
-            expand={true} // Allows toasts to expand
-            richColors // Enables predefined color schemes
-            closeButton // Shows close button on toasts
-            toastOptions={{
-              style: {
-                maxWidth: "600px",
-                padding: "16px",
-                borderRadius: "12px",
-                fontSize: "16px",
-                boxShadow:
-                  "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-              },
-            }}
-          /> {/* The toast component itself */}
-        </div>
+        </URLStateProvider>
       </body>
     </html>
   );

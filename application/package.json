@@ -4,12 +4,27 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "dev:turbo": "next dev --turbo",
+    "build": "next build && cp -r .next/static .next/standalone/.next/static",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
     "setup": "npm ci && npx prisma generate && npm run build",
-    "clean": "rm -rf .next node_modules"
+    "clean": "rm -rf .next node_modules",
+    "db:seed": "ts-node --esm --project ./prisma/tsconfig.seed.json ./prisma/seed.ts",
+    "db:seed:fresh": "ts-node --esm --project prisma/tsconfig.seed.json prisma/seed.ts --fresh",
+    "build:clean": "rm -rf .next && npm run build",
+    "build:low-memory": "NODE_OPTIONS='--max_old_space_size=512 --gc-interval=100' npm run build",
+    "build:part1": "NODE_OPTIONS='--max_old_space_size=512' next build --no-lint",
+    "build:part2": "cp -r .next/static .next/standalone/.next/static || true",
+    "build:micro": "npm run build:part1 && npm run build:part2",
+    "prisma:generate": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
+    "wait-for-db": "node -e \"const net=require('net');const client=net.createConnection({host:'db',port:3306},()=>process.exit(0));client.on('error',()=>setTimeout(()=>{console.log('Waiting for DB...');process.exit(1)},1000))\"",
+    "docker:init": "npm run wait-for-db && npm run prisma:generate && npm run prisma:deploy",
+    "db:init": "docker compose exec db mysql -u root -pmysql -e \"CREATE USER IF NOT EXISTS 'gator_user'@'%' IDENTIFIED BY 'gator_pass'; GRANT ALL PRIVILEGES ON *.* TO 'gator_user'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;\"",
+    "db:seed:docker": "NODE_OPTIONS='--loader ts-node/esm' node --require ts-node/register/transpile-only --project ./prisma/tsconfig.seed.json ./prisma/seed.ts",
+    "db:setup": "npm run db:init && docker compose exec web npx prisma migrate dev --name init && docker compose exec web node --loader ts-node/esm prisma/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "3.3.4",
@@ -77,11 +92,11 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "14.2.16",
     "postcss": "^8.4.47",
-    "prisma": "5.21.1",
+    "prisma": "^6.0.1",
     "tailwindcss": "^3.4.14",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "5.3.3"
+    "typescript": "5.7.2"
   },
   "eslintConfig": {
     "extends": [

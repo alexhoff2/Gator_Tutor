@@ -1,4 +1,8 @@
-import type { User } from "@prisma/client";
+/**
+ * Message Types
+ * 
+ * Defines the shape of message data and responses
+ */
 
 //Shape of message data
 export interface Message {

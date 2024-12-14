@@ -88,12 +88,15 @@ export function TutorCard({ tutor }: TutorCardProps) {
   }
 
   /**
-   * Profile View Handler
-   *
-   * Direct navigation to preserve 3D transform during transition
+   * Profile Action Handlers
    */
-  function handleViewProfile() {
-    window.location.href = `/tutors/${tutor.id}`;
+  function handleViewInfo() {
+    window.open(`/tutors/${tutor.id}`, "_blank");
+  }
+
+  function handleSendMessage() {
+    // TODO: Implement message functionality
+    window.open(`/messages/new/${tutor.id}`, "_blank");
   }
 
   return (
@@ -172,13 +175,20 @@ export function TutorCard({ tutor }: TutorCardProps) {
             <div className="text-sm text-gray-500">
               Experience: {tutor.experience || "Not specified"}
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
               <button
-                onClick={handleViewProfile}
+                onClick={handleSendMessage}
+                className="bg-[#4B2E83] text-white px-4 py-2 rounded-md font-semibold 
+                hover:bg-[#3b2566] transition-colors shrink-0"
+              >
+                Send Message
+              </button>
+              <button
+                onClick={handleViewInfo}
                 className="bg-slate-100 text-[#4B2E83] px-4 py-2 rounded-md font-semibold 
                 hover:bg-slate-200 transition-colors shrink-0"
               >
-                View Profile
+                View Info
               </button>
             </div>
           </div>

@@ -68,6 +68,7 @@ model TutorPost {
   experience    String?        @db.VarChar(255)
   reviews       Int?
   subjects      String?        @db.Text
+  isApproved    Boolean        @default(false) @map("is_approved")
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   tutorSubjects TutorSubject[]
   messages      Message[]

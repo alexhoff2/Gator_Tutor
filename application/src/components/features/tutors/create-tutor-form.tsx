@@ -44,6 +44,7 @@ import { Check } from "lucide-react";
 import { useAuthProtection } from "@/lib/hooks/useAuthProtection";
 import { FormSkeleton } from "@/components/ui/skeletons";
 import { TutorFormStateService } from "@/lib/services/redirect-state";
+import Image from "next/image";
 
 /**
  * Create Tutor Form Component 🎓
@@ -157,6 +158,16 @@ function FileUpload({
         />
       </label>
     </div>
+  );
+}
+
+// Add this utility component for required field labels
+function RequiredLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span>
+      {children}
+      <span className="text-red-500 ml-1">*</span>
+    </span>
   );
 }
 
@@ -308,7 +319,7 @@ export function CreateTutorForm() {
   useEffect(() => {
     const savedState = TutorFormStateService.load();
     if (savedState) {
-      console.log("Restoring form state:", savedState); // Debug log
+      console.log("Restoring form state:", savedState);
       form.reset(savedState.formData);
 
       if (savedState.hadFiles.profilePhoto) {
@@ -321,13 +332,16 @@ export function CreateTutorForm() {
         setNeedsReupload((prev) => ({ ...prev, resumePdf: true }));
       }
     }
-  }, []);
+  }, [form]);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex flex-col items-center mb-10">
-          <div className="w-16 h-16 rounded-full bg-[#4B2E83] flex items-center justify-center mb-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 max-w-[55rem] mx-auto"
+      >
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-16 h-16 rounded-full bg-[#4B2E83] flex items-center justify-center mb-3">
             <svg
               className="w-8 h-8 text-[#FFC726]"
               fill="none"
@@ -342,7 +356,7 @@ export function CreateTutorForm() {
               />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-[#4B2E83] mb-2">
+          <h1 className="text-3xl font-bold text-[#4B2E83] mb-1">
             Create Your Tutor Profile
           </h1>
           <p className="text-lg text-gray-600">
@@ -350,227 +364,246 @@ export function CreateTutorForm() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <div className="flex flex-col items-center">
-              <label className="cursor-pointer">
-                <div className="w-56 h-56 rounded-full bg-white border-2 border-dashed border-gray-300 flex flex-col items-center justify-center relative group">
-                  {profilePhoto ? (
-                    <img
-                      src={URL.createObjectURL(profilePhoto)}
-                      alt="Profile"
-                      className="w-full h-full rounded-full object-cover"
-                    />
-                  ) : (
-                    <>
-                      <Icons.user className="w-28 h-28 text-gray-400 mb-3" />
-                      <span className="text-lg text-gray-500 text-center px-4">
-                        Click to upload profile picture
-                      </span>
-                    </>
-                  )}
-                </div>
-                <input
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) setProfilePhoto(file);
-                  }}
-                />
-              </label>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-white rounded-xl p-4 shadow-sm">
-                <h4 className="text-lg font-semibold text-[#4B2E83] mb-3">
-                  Introduction Video
-                </h4>
-                <FileUploadWithStatus
-                  accept="video/*"
-                  onChange={(file) => {
-                    setProfileVideo(file);
-                    setNeedsReupload((prev) => ({
-                      ...prev,
-                      profileVideo: false,
-                    }));
-                  }}
-                  label="MP4, WebM, OGG (10MB)"
-                  needsReupload={needsReupload.profileVideo}
-                />
-              </div>
-
-              <div className="bg-white rounded-xl p-4 shadow-sm">
-                <h4 className="text-lg font-semibold text-[#4B2E83] mb-3">
-                  Resume/CV
-                </h4>
-                <FileUploadWithStatus
-                  accept=".pdf"
-                  onChange={(file) => {
-                    setResumePdf(file);
-                    setNeedsReupload((prev) => ({ ...prev, resumePdf: false }));
-                  }}
-                  label="PDF files only (5MB)"
-                  needsReupload={needsReupload.resumePdf}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h3 className="text-xl font-bold text-[#4B2E83] mb-6">
-                Basic Information
-              </h3>
-              <div className="space-y-5">
-                <FormField
-                  control={form.control}
-                  name="displayName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#4B2E83]">Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Your name"
-                          className="border-2 focus:ring-[#4B2E83]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="subjectId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-lg font-medium text-[#4B2E83]">
-                        Subject
-                      </FormLabel>
-                      <Select
-                        value={field.value}
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setOpen(false);
-                        }}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a subject" />
-                        </SelectTrigger>
-                        <SelectContent className="max-h-[300px]">
-                          {subjects?.map((subject) => (
-                            <SelectItem
-                              key={subject.id}
-                              value={subject.id.toString()}
-                              className="cursor-pointer"
-                            >
-                              {subject.subjectName}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="hourlyRate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#4B2E83]">
-                        Hourly Rate ($)
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          placeholder="25.00"
-                          className="border-2 focus:ring-[#4B2E83]"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="contactInfo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#4B2E83]">
-                        Contact Information
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Email or phone number"
-                          className="border-2 focus:ring-[#4B2E83]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                      <FormDescription className="text-sm text-gray-500">
-                        Enter your preferred contact method (email or phone
-                        number)
-                      </FormDescription>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[#4B2E83]">Bio</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Tell students about yourself..."
-                          className="h-32 border-2 focus:ring-[#4B2E83]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h3 className="text-xl font-bold text-[#4B2E83] mb-6">
-                Availability
-              </h3>
+        <div className="bg-white rounded-xl p-5 shadow-sm space-y-4">
+          <h3 className="text-xl font-bold text-[#4B2E83] mb-4">
+            Basic Information
+          </h3>
+          <div className="space-y-5">
+            <div className="flex gap-6 justify-between">
               <FormField
                 control={form.control}
-                name="availability"
+                name="displayName"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex-1">
+                    <FormLabel className="text-[#4B2E83]">
+                      <RequiredLabel>Name</RequiredLabel>
+                    </FormLabel>
                     <FormControl>
-                      <WeeklyScheduler
-                        value={field.value}
-                        onChange={field.onChange}
+                      <Input
+                        placeholder="Your name"
+                        className="border-2 focus:ring-[#4B2E83]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="subjectId"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel className="text-lg font-medium text-[#4B2E83]">
+                      <RequiredLabel>Subject</RequiredLabel>
+                    </FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setOpen(false);
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a subject" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        {subjects?.map((subject) => (
+                          <SelectItem
+                            key={subject.id}
+                            value={subject.id.toString()}
+                            className="cursor-pointer"
+                          >
+                            {subject.subjectName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex gap-6 justify-between">
+              <FormField
+                control={form.control}
+                name="hourlyRate"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel className="text-[#4B2E83]">
+                      <RequiredLabel>Hourly Rate ($)</RequiredLabel>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        placeholder="25.00"
+                        className="border-2 focus:ring-[#4B2E83]"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="contactInfo"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel className="text-[#4B2E83]">
+                      <RequiredLabel>Contact Information</RequiredLabel>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Email or phone number"
+                        className="border-2 focus:ring-[#4B2E83]"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                    <FormDescription className="text-sm text-gray-500">
+                      Enter your preferred contact method
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#4B2E83]">
+                    <RequiredLabel>Bio</RequiredLabel>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell students about yourself..."
+                      className="h-32 border-2 focus:ring-[#4B2E83]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-5 shadow-sm">
+          <h3 className="text-xl font-bold text-[#4B2E83] mb-4">
+            Availability
+          </h3>
+          <FormField
+            control={form.control}
+            name="availability"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <WeeklyScheduler
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="bg-white rounded-xl p-5 shadow-sm space-y-4">
+          <h3 className="text-xl font-bold text-[#4B2E83] mb-4">
+            Additional Documents
+          </h3>
+
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-lg font-semibold text-[#4B2E83] mb-3">
+                Profile Photo
+              </h4>
+              <FileUploadWithStatus
+                accept="image/*"
+                onChange={(file) => {
+                  setProfilePhoto(file);
+                  setNeedsReupload((prev) => ({
+                    ...prev,
+                    profilePhoto: false,
+                  }));
+                }}
+                label="Upload your profile picture"
+                needsReupload={needsReupload.profilePhoto}
+              />
+              {profilePhoto && (
+                <div className="mt-2 flex items-center gap-2">
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <Image
+                      src={URL.createObjectURL(profilePhoto)}
+                      alt="Profile preview"
+                      width={48}
+                      height={48}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <span className="text-sm text-gray-600">
+                    {profilePhoto.name}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-[#4B2E83] mb-3">
+                Introduction Video
+              </h4>
+              <FileUploadWithStatus
+                accept="video/*"
+                onChange={(file) => {
+                  setProfileVideo(file);
+                  setNeedsReupload((prev) => ({
+                    ...prev,
+                    profileVideo: false,
+                  }));
+                }}
+                label="MP4, WebM, OGG (10MB)"
+                needsReupload={needsReupload.profileVideo}
+              />
+            </div>
+
+            <div>
+              <h4 className="text-lg font-semibold text-[#4B2E83] mb-3">
+                Resume/CV
+              </h4>
+              <FileUploadWithStatus
+                accept=".pdf"
+                onChange={(file) => {
+                  setResumePdf(file);
+                  setNeedsReupload((prev) => ({ ...prev, resumePdf: false }));
+                }}
+                label="PDF files only (5MB)"
+                needsReupload={needsReupload.resumePdf}
+              />
             </div>
           </div>
         </div>
 
-        <div className="flex justify-center mt-10">
+        <div className="flex justify-center gap-4 mt-6">
+          <Button
+            type="button"
+            variant="outline"
+            className="px-16 py-5 text-xl rounded-xl border-2 border-[#4B2E83] text-[#4B2E83] hover:bg-[#4B2E83]/10"
+            onClick={() => router.push("/")}
+          >
+            Cancel
+          </Button>
           <Button
             type="submit"
             className="bg-[#4B2E83] hover:bg-[#4B2E83]/90 text-white px-16 py-5 text-xl rounded-xl"

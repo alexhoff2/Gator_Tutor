@@ -1,3 +1,4 @@
+import { ClientWrapper } from "@/components/features/layout/client-wrapper";
 import { DashboardContent } from "@/components/features/dashboard/dashboard-content";
 
 /**
@@ -13,8 +14,13 @@ export default function DashboardPage() {
     <div className="min-h-screen py-8 px-4">
       {/* Frosted glass container for dashboard content */}
       <div className="max-w-6xl mx-auto bg-white/75 backdrop-blur-md rounded-3xl p-8 shadow-lg">
-        <DashboardContent /> {/* The content component itself */}
+        <ClientWrapper>
+          <DashboardContent /> {/* The content component itself */}
+        </ClientWrapper> 
       </div>
     </div>
   );
 }
+
+export const dynamic = 'force-dynamic';
+ 

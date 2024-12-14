@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,8 @@ import { DualSlider } from "@/components/ui/dual-slider";
 import { useTutorPosts } from "@/lib/hooks/useTutorPosts";
 import { PriceDistribution } from "@/components/ui/price-distribution";
 import type { TutorPost } from "@/lib/types/tutorPost";
+import { useURLState } from "@/lib/context/url-state-context";
+import { useCallback } from "react";
 
 /**
  * Filter Panel Component 🎯
@@ -30,72 +31,35 @@ import type { TutorPost } from "@/lib/types/tutorPost";
  * !IMPORTANT: All filter states are preserved in URL parameters so dont worry about losing the state it handles it for you
  */
 export function FilterPanel() {
-  // Navigation and URL handling
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  // Data fetching hooks
+  const { getParam, setParams, clearParams } = useURLState();
   const { activeSubjects } = useSubjects();
   const { priceRange, loading, initialLoad, allPosts } = useTutorPosts();
 
-  // Extract current filter values from URL
-  const currentMinRate = Number(searchParams.get("minRate") ?? priceRange.min);
-  const currentMaxRate = Number(searchParams.get("maxRate") ?? priceRange.max);
-  const currentSubject = searchParams.get("subject") ?? "";
-
-  /**
-   * URL Parameter Update Handler
-   *
-   * !IMPORTANT: Updates URL without page refresh
-   *
-   * @param updates - Key-value pairs of params to update
-   *
-   * Example:
-   * updateSearchParams({ minRate: "25", maxRate: "50" })
-   * => /tutors?minRate=25&maxRate=50
-   */
-  const updateSearchParams = (updates: Record<string, string | null>) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    // Update or remove parameters based on values
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value === null) {
-        params.delete(key); // Remove param if null
-      } else {
-        params.set(key, value); // Update param value
-      }
-    });
-
-    // Update URL without full page reload
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  // Memoize current values to prevent unnecessary re-renders
+  const currentValues = {
+    minRate: Number(getParam("minRate") ?? priceRange.min),
+    maxRate: Number(getParam("maxRate") ?? priceRange.max),
+    subject: getParam("subject") ?? "all",
   };
 
-  /**
-   * Price Range Handler
-   *
-   * Updates both min and max rate parameters
-   * Ensures valid range selection
-   */
-  const handleRateChange = (values: number[]) => {
-    updateSearchParams({
-      minRate: values[0].toString(),
-      maxRate: values[1].toString(),
-    });
-  };
+  const handleRateChange = useCallback(
+    ([min, max]: number[]) => {
+      setParams({
+        minRate: min.toString(),
+        maxRate: max.toString(),
+      });
+    },
+    [setParams]
+  );
 
-  /**
-   * Subject Filter Handler
-   *
-   * Special handling for "all" selection:
-   * - Removes subject parameter when "all" is selected
-   * - Adds specific subject otherwise
-   */
-  const handleSubjectChange = (value: string) => {
-    updateSearchParams({
-      subject: value === "all" ? null : value, // Remove param for "all"
-    });
-  };
+  const handleSubjectChange = useCallback(
+    (value: string) => {
+      setParams({
+        subject: value === "all" ? null : value,
+      });
+    },
+    [setParams]
+  );
 
   /**
    * Filter Reset Handler
@@ -105,7 +69,7 @@ export function FilterPanel() {
    * - Preserving other URL parameters
    */
   const clearFilters = () => {
-    router.push(pathname);
+    clearParams();
   };
 
   return (
@@ -127,7 +91,7 @@ export function FilterPanel() {
               />
               {/* Dual slider for price range selection */}
               <DualSlider
-                value={[currentMinRate, currentMaxRate]}
+                value={[currentValues.minRate, currentValues.maxRate]}
                 min={priceRange.min}
                 max={priceRange.max}
                 step={1}
@@ -143,7 +107,7 @@ export function FilterPanel() {
         <div className="space-y-3">
           <Label className="text-sm font-medium">Subject</Label>
           <Select
-            value={currentSubject || "all"}
+            value={currentValues.subject}
             onValueChange={handleSubjectChange}
           >
             <SelectTrigger className="w-full bg-white">

@@ -1,18 +1,41 @@
+# Version control
 .git
 .gitignore
-node_modules
-npm-debug.log
-README.md
-.next
-.env
-.env.*
+
+# Logs
 *.log
-.dockerignore
-Dockerfile
-docker-compose.yml
+npm-debug.log*
+
+# Dependencies
+node_modules
+
+# Build outputs
+.next
 dist
 build
 coverage
+
+# Environment files
+.env
+.env.*
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# OS files
 .DS_Store
 .idea
-.vscode 
+.vscode
+
+# Allow these files for development mounting
+!src/**
+!public/**
+!prisma/**
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.js
+!postcss.config.js
+!tailwind.config.js
