@@ -46,3 +46,4 @@ application/*.pem
 # Docker
 application/docker-compose.override.yml
 node_modules/*
+application/prisma/migrations/*
