@@ -58,13 +58,13 @@ export default function AboutPage() {
             <TeamMember
               link="/dylan-lee"
               image="/images/Dylan-Lee.png"
-              name="Dylan Lee"
+              name="Dylan Faulder"
               role="GitHub Master"
             />
             <TeamMember
               link="/dalan-moore"
               image="/images/Dalan-Moore.png"
-              name="Dalan Moore"
+              name="Dalan Choy"
               role="Front-End"
             />
           </div>
