@@ -3,6 +3,7 @@
 import { useTutorPosts } from "@/lib/hooks/useTutorPosts";
 import { TutorCard } from "@/components/features/tutors/tutor-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 
 /**
  * Tutor List Component
@@ -79,11 +80,21 @@ export function TutorList() {
         Found {posts.length} {posts.length === 1 ? "result" : "results"}
       </div>
 
-      <div className="grid grid-cols-1 gap-2 md:gap-4">
+      <motion.div
+        className="grid grid-cols-1 gap-2 md:gap-4"
+        layout // This will animate the grid reorganization
+        transition={{ duration: 0.3 }}
+      >
         {posts.map((tutor) => (
-          <TutorCard key={tutor.id} tutor={tutor} />
+          <motion.div
+            key={tutor.id}
+            layout // This helps maintain smooth transitions
+            transition={{ duration: 0.3 }}
+          >
+            <TutorCard tutor={tutor} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
