@@ -62,6 +62,10 @@ import { ArrowLeft } from "lucide-react";
 
 // Form validation schema
 const formSchema = z.object({
+  title: z
+    .string()
+    .min(5, "Title must be at least 5 characters")
+    .max(255, "Title cannot exceed 255 characters"),
   displayName: z.string().min(2, "Name must be at least 2 characters"),
   bio: z
     .string()
@@ -77,6 +81,7 @@ const formSchema = z.object({
 });
 
 interface TutorFormData {
+  title: string;
   displayName: string;
   bio: string;
   hourlyRate: number;
@@ -196,6 +201,7 @@ export function CreateTutorForm() {
   const form = useForm<TutorFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      title: "",
       displayName: "",
       bio: "",
       hourlyRate: 0,
@@ -340,7 +346,7 @@ export function CreateTutorForm() {
       <Button
         variant="ghost"
         className="absolute top-4 left-4 p-2"
-        onClick={() => router.push('/tutors')}
+        onClick={() => router.push("/tutors")}
       >
         <ArrowLeft className="h-6 w-6" />
       </Button>
@@ -378,6 +384,29 @@ export function CreateTutorForm() {
             Basic Information
           </h3>
           <div className="space-y-5">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#4B2E83]">
+                    <RequiredLabel>Post Title</RequiredLabel>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="E.g., 'Experienced Math Tutor for All Levels'"
+                      className="border-2 focus:ring-[#4B2E83]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <FormDescription className="text-sm text-gray-500">
+                    A clear, descriptive title for your tutoring service
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
             <div className="flex gap-6 justify-between">
               <FormField
                 control={form.control}

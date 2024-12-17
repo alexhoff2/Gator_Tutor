@@ -162,6 +162,7 @@ export async function getTutorPosts({
  */
 interface CreateTutorPostData {
   userId: number;
+  title: string;
   displayName: string;
   bio: string;
   hourlyRate: number;
@@ -186,6 +187,7 @@ export async function createTutorPost(data: CreateTutorPostData) {
 
   const tutorPostData = {
     userId: data.userId,
+    title: data.title,
     displayName: data.displayName,
     bio: data.bio,
     hourlyRate: data.hourlyRate,

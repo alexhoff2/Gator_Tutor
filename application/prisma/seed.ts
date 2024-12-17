@@ -127,6 +127,7 @@ const users = [
     password: bcrypt.hashSync("password123", 10),
     tutorPost: {
       create: {
+        title: "Mathematics Made Simple: Expert Tutoring for All Levels",
         displayName: "Mei Zhang",
         bio: "Mathematics and Statistics expert. I help students understand complex mathematical concepts through real-world applications.",
         availability: {
@@ -153,6 +154,7 @@ const users = [
     password: bcrypt.hashSync("password123", 10),
     tutorPost: {
       create: {
+        title: "Pre-Med Science Tutor: Chemistry & Biology Expert",
         displayName: "Sofia Martinez",
         bio: "Chemistry and Biology tutor with pre-med background. I specialize in helping students prepare for their MCAT and science courses.",
         availability: {
@@ -179,6 +181,7 @@ const users = [
     password: bcrypt.hashSync("password123", 10),
     tutorPost: {
       create: {
+        title: "Spanish & English Literature: Making Languages Fun!",
         displayName: "Alex Schmidt",
         bio: "Bilingual tutor specializing in Spanish and English Literature. I make learning languages fun and engaging!",
         availability: {
@@ -205,6 +208,7 @@ const users = [
     password: bcrypt.hashSync("password123", 10),
     tutorPost: {
       create: {
+        title: "Master Computer Science: Expert Tutoring for All Levels",
         displayName: "James Wilson",
         bio: "Computer Science graduate student with a passion for teaching programming and software development concepts.",
         availability: {
@@ -231,6 +235,7 @@ const users = [
     password: bcrypt.hashSync("password123", 10),
     tutorPost: {
       create: {
+        title: "Physics & Math Tutoring: From Basics to Advanced",
         displayName: "Raj Patel",
         bio: "Experienced tutor specializing in Mathematics and Physics. I have helped numerous students improve their grades and understanding of complex concepts.",
         availability: {
