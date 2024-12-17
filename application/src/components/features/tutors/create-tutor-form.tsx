@@ -58,6 +58,7 @@ import { ArrowLeft } from "lucide-react";
  *
  * !IMPORTANT: This form maintains state during authentication flow (lazy auth/login)
  * TODO it does not handle the file re-uploads after auth currently it just toasts the user to re-upload the files after auth
+ * 
  */
 
 // Form validation schema
