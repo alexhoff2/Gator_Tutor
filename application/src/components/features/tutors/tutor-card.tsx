@@ -9,6 +9,9 @@ import type { TutorPost } from "@/lib/types/tutorPost";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { SendMessage } from "@/components/features/messages/send-message";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 /**
  * Tutor Card Component 🎨
@@ -46,184 +49,93 @@ function getImagePath(profilePhoto: string | null) {
 
 export function TutorCard({ tutor }: TutorCardProps) {
   const router = useRouter();
-  const cardRef = useRef<HTMLDivElement>(null);
-  // Track rotation for 3D effect
-  const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [isMessaging, setIsMessaging] = useState(false);
 
-  /**
-   * Mouse Movement Handler
-   *
-   * Creates 3D rotation effect based on cursor position:
-   * - Calculates cursor position relative to card center
-   * - Applies rotation transforms
-   * - Smooths movement with transition
-   *
-   * !IMPORTANT: Uses perspective transform for realistic 3D
-   * TODO This should eventually be in a shared component I was just lazy :P
-   */
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!cardRef.current) return;
-
-    const card = cardRef.current;
-    const rect = card.getBoundingClientRect();
-
-    // Calculate cursor position relative to card center
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    // Calculate rotation angles
-    const rotateX = -(y - centerY) / 40; // Inverted for natural feel
-    const rotateY = (x - centerX) / 160; // Reduced for subtle effect
-
-    setRotation({ x: rotateX, y: rotateY });
-  }
-
-  /**
-   * Mouse Leave Handler
-   *
-   * Resets card rotation to original position
-   * Transition handled by CSS
-   */
-  function handleMouseLeave() {
-    setRotation({ x: 0, y: 0 });
-  }
-
-  /**
-   * Profile Action Handlers
-   */
   function handleViewInfo() {
     window.open(`/tutors/${tutor.id}`, "_blank");
   }
 
-  function handleSendMessage() {
-    setIsMessaging(true);
-  }
-
-  function handleBack() {
-    setIsMessaging(false);
-  }
-
   return (
-    <AnimatePresence mode="wait">
-      {!isMessaging ? (
-        <motion.div
-          initial={{ scale: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <Card
-            ref={cardRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className="group p-4 transition-all duration-300 ease-out 
-            hover:bg-slate-50/80 hover:shadow-lg
-            relative overflow-hidden
-            before:absolute before:inset-0 
-            before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
-            before:translate-x-[-200%] before:animate-[shimmer_3s_infinite]
-            before:opacity-0 before:group-hover:opacity-100
-            before:transition-opacity before:duration-300"
-            style={{
-              transform: `
-                perspective(2000px) 
-                rotateX(${rotation.x}deg) 
-                rotateY(${rotation.y}deg)
-                scale(${rotation.x || rotation.y ? 1.005 : 1})
-              `,
-            }}
-          >
-            <div className="flex flex-col md:flex-row md:gap-8">
-              {/* Profile Image Section */}
-              <Avatar className="w-full md:w-[180px] h-[180px] rounded-2xl shrink-0">
-                <AvatarImage
-                  src={getImagePath(tutor.profilePhoto)}
-                  alt={tutor.displayName}
-                  className="object-cover rounded-2xl"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/blank-pfp.png";
-                  }}
-                />
-                <AvatarFallback className="text-2xl rounded-2xl">
-                  {tutor.displayName[0].toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+    <>
+      <motion.div className="h-full">
+        <Card className="overflow-hidden h-full flex flex-col transition-transform duration-200 hover:scale-[1.02] border-0">
+          {/* Profile Image */}
+          <div className="relative w-[calc(100%+4px)] -ml-[2px] -mt-[2px] pt-[80%]">
+            <Image
+              src={getImagePath(tutor.profilePhoto)}
+              alt={tutor.displayName}
+              fill
+              className="object-cover object-center object-position-top"
+              style={{ objectPosition: "50% 30%" }}
+              onError={(e) => {
+                e.currentTarget.src = "/images/blank-pfp.png";
+              }}
+            />
+          </div>
 
-              {/* Tutor Information Section */}
-              <div className="flex-1 space-y-4 overflow-hidden">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  {/* Name and Subjects */}
-                  <div>
-                    <h3 className="text-xl font-semibold truncate">
-                      {tutor.displayName}
-                    </h3>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {tutor.tutorSubjects.map(({ subject }) => (
-                        <Badge key={subject.id} variant="secondary">
-                          {subject.subjectName}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Pricing and Reviews */}
-                  <div className="text-right shrink-0">
-                    <div className="text-2xl font-bold text-[#4B2E83]">
-                      ${Number(tutor.hourlyRate).toFixed(2)}/hr
-                    </div>
-                    {tutor.reviews && (
-                      <div className="text-sm text-gray-500">
-                        ⭐ {tutor.reviews} reviews
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Bio Section */}
-                <p className="mt-4 text-gray-600 line-clamp-3 break-all">
-                  {tutor.bio}
-                </p>
-
-                {/* Footer Section */}
-                <div className="flex flex-col md:flex-row md:items-center justify-end gap-4 mt-4">
-                  <div className="text-sm text-gray-500">
-                    Experience: {tutor.experience || "Not specified"}
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={handleSendMessage}
-                      className="bg-slate-100 text-[#4B2E83] px-4 py-2 rounded-md font-semibold 
-                      hover:bg-slate-200 transition-colors shrink-0"
+          {/* Content Section */}
+          <div className="p-4 flex-1 flex flex-col">
+            {/* Tutor Info */}
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <h3 className="font-semibold text-lg">{tutor.displayName}</h3>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {tutor.tutorSubjects.map(({ subject }) => (
+                    <Badge
+                      key={subject.id}
+                      variant="secondary"
+                      className="bg-gray-200 hover:bg-gray-300"
                     >
-                      Send Message
-                    </button>
-                    <button
-                      onClick={handleViewInfo}
-                      className="bg-[#4B2E83] text-white px-4 py-2 rounded-md font-semibold 
-                      hover:bg-[#3b2566] transition-colors shrink-0"
-                    >
-                      View Info
-                    </button>
-                  </div>
+                      {subject.subjectName}
+                    </Badge>
+                  ))}
                 </div>
               </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-[#4B2E83] flex items-baseline justify-end">
+                  ${Number(tutor.hourlyRate).toFixed(2)}
+                  <span className="text-sm ml-1">/hr</span>
+                </div>
+                {tutor.reviews && (
+                  <div className="text-sm text-gray-500">
+                    ⭐ {tutor.reviews} reviews
+                  </div>
+                )}
+              </div>
             </div>
-          </Card>
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="bg-white rounded-lg shadow-lg p-6"
-        >
+
+            {/* Title and Bio Section */}
+            <div className="text-gray-600">
+              <h2 className="text-base mb-2">{tutor.title}</h2>
+              <p className="line-clamp-3 mb-4 flex-1">{tutor.bio}</p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-2 mt-auto">
+              <Button
+                onClick={() => setIsMessaging(true)}
+                variant="outline"
+                className="flex-1 border-[#4B2E83] text-[#4B2E83] hover:bg-[#4B2E83]/10"
+              >
+                Message
+              </Button>
+              <Button
+                onClick={handleViewInfo}
+                className="flex-1 bg-[#4B2E83] hover:bg-[#3b2566] text-white"
+              >
+                More details
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </motion.div>
+
+      <Dialog open={isMessaging} onOpenChange={setIsMessaging}>
+        <DialogContent className="sm:max-w-[425px] bg-[#f8f9fa]">
           <div className="flex items-center gap-4 mb-4">
             <button
-              onClick={handleBack}
-              className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+              onClick={() => setIsMessaging(false)}
+              className="p-2 hover:bg-slate-200 rounded-full transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -231,9 +143,13 @@ export function TutorCard({ tutor }: TutorCardProps) {
               Message {tutor.displayName}
             </h2>
           </div>
-          <SendMessage recipientId={tutor.id} tutorPostId={tutor.id} />
-        </motion.div>
-      )}
-    </AnimatePresence>
+          <SendMessage
+            recipientId={tutor.id}
+            tutorPostId={tutor.id}
+            onSent={() => setIsMessaging(false)}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

@@ -21,9 +21,14 @@ import { RedirectStateService } from "@/lib/services/redirect-state";
 interface SendMessageProps {
   recipientId: number; // ID of the tutor receiving the message
   tutorPostId: number; // ID of the related tutor post
+  onSent?: () => void; // Made optional with ?
 }
 
-export function SendMessage({ recipientId, tutorPostId }: SendMessageProps) {
+export function SendMessage({
+  recipientId,
+  tutorPostId,
+  onSent,
+}: SendMessageProps) {
   // 🔄 State management
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -85,6 +90,11 @@ export function SendMessage({ recipientId, tutorPostId }: SendMessageProps) {
     } finally {
       setIsSending(false);
     }
+
+    // Call onSent callback after successful message send
+    if (onSent) {
+      onSent();
+    }
   };
 
   /**
@@ -106,7 +116,7 @@ export function SendMessage({ recipientId, tutorPostId }: SendMessageProps) {
       <Textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Write your message here... ✍️"
+        placeholder="Write your message here... Please include your contact info (email/phone)."
         className="min-h-[100px]"
       />
       <Button
