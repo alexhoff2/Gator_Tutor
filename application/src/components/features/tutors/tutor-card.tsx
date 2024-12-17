@@ -194,15 +194,15 @@ export function TutorCard({ tutor }: TutorCardProps) {
                   <div className="flex justify-end gap-2">
                     <button
                       onClick={handleSendMessage}
-                      className="bg-[#4B2E83] text-white px-4 py-2 rounded-md font-semibold 
-                      hover:bg-[#3b2566] transition-colors shrink-0"
+                      className="bg-slate-100 text-[#4B2E83] px-4 py-2 rounded-md font-semibold 
+                      hover:bg-slate-200 transition-colors shrink-0"
                     >
                       Send Message
                     </button>
                     <button
                       onClick={handleViewInfo}
-                      className="bg-slate-100 text-[#4B2E83] px-4 py-2 rounded-md font-semibold 
-                      hover:bg-slate-200 transition-colors shrink-0"
+                      className="bg-[#4B2E83] text-white px-4 py-2 rounded-md font-semibold 
+                      hover:bg-[#3b2566] transition-colors shrink-0"
                     >
                       View Info
                     </button>
