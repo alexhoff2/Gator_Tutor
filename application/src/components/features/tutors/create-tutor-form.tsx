@@ -45,6 +45,7 @@ import { useAuthProtection } from "@/lib/hooks/useAuthProtection";
 import { FormSkeleton } from "@/components/ui/skeletons";
 import { TutorFormStateService } from "@/lib/services/redirect-state";
 import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 
 /**
  * Create Tutor Form Component 🎓
@@ -336,6 +337,14 @@ export function CreateTutorForm() {
 
   return (
     <Form {...form}>
+      <Button
+        variant="ghost"
+        className="absolute top-4 left-4 p-2"
+        onClick={() => router.push('/tutors')}
+      >
+        <ArrowLeft className="h-6 w-6" />
+      </Button>
+
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 max-w-[55rem] mx-auto"
