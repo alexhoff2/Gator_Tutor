@@ -6,6 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { TutorPost } from "@/lib/types/tutorPost";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
+import { SendMessage } from "@/components/features/messages/send-message";
 
 /**
  * Tutor Card Component 🎨
@@ -46,6 +49,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   // Track rotation for 3D effect
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [isMessaging, setIsMessaging] = useState(false);
 
   /**
    * Mouse Movement Handler
@@ -95,107 +99,141 @@ export function TutorCard({ tutor }: TutorCardProps) {
   }
 
   function handleSendMessage() {
-    // TODO: Implement message functionality
-    window.open(`/messages/new/${tutor.id}`, "_blank");
+    setIsMessaging(true);
+  }
+
+  function handleBack() {
+    setIsMessaging(false);
   }
 
   return (
-    <Card
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="group p-4 transition-all duration-300 ease-out 
-      hover:bg-slate-50/80 hover:shadow-lg
-      relative overflow-hidden
-      before:absolute before:inset-0 
-      before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
-      before:translate-x-[-200%] before:animate-[shimmer_3s_infinite]
-      before:opacity-0 before:group-hover:opacity-100
-      before:transition-opacity before:duration-300"
-      style={{
-        transform: `
-          perspective(2000px) 
-          rotateX(${rotation.x}deg) 
-          rotateY(${rotation.y}deg)
-          scale(${rotation.x || rotation.y ? 1.005 : 1})
-        `,
-      }}
-    >
-      <div className="flex flex-col md:flex-row md:gap-8">
-        {/* Profile Image Section */}
-        <Avatar className="w-full md:w-[180px] h-[180px] rounded-2xl shrink-0">
-          <AvatarImage
-            src={getImagePath(tutor.profilePhoto)}
-            alt={tutor.displayName}
-            className="object-cover rounded-2xl"
-            onError={(e) => {
-              e.currentTarget.src = "/images/blank-pfp.png";
+    <AnimatePresence mode="wait">
+      {!isMessaging ? (
+        <motion.div
+          initial={{ scale: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Card
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="group p-4 transition-all duration-300 ease-out 
+            hover:bg-slate-50/80 hover:shadow-lg
+            relative overflow-hidden
+            before:absolute before:inset-0 
+            before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
+            before:translate-x-[-200%] before:animate-[shimmer_3s_infinite]
+            before:opacity-0 before:group-hover:opacity-100
+            before:transition-opacity before:duration-300"
+            style={{
+              transform: `
+                perspective(2000px) 
+                rotateX(${rotation.x}deg) 
+                rotateY(${rotation.y}deg)
+                scale(${rotation.x || rotation.y ? 1.005 : 1})
+              `,
             }}
-          />
-          <AvatarFallback className="text-2xl rounded-2xl">
-            {tutor.displayName[0].toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+          >
+            <div className="flex flex-col md:flex-row md:gap-8">
+              {/* Profile Image Section */}
+              <Avatar className="w-full md:w-[180px] h-[180px] rounded-2xl shrink-0">
+                <AvatarImage
+                  src={getImagePath(tutor.profilePhoto)}
+                  alt={tutor.displayName}
+                  className="object-cover rounded-2xl"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/blank-pfp.png";
+                  }}
+                />
+                <AvatarFallback className="text-2xl rounded-2xl">
+                  {tutor.displayName[0].toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
 
-        {/* Tutor Information Section */}
-        <div className="flex-1 space-y-4 overflow-hidden">
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-            {/* Name and Subjects */}
-            <div>
-              <h3 className="text-xl font-semibold truncate">
-                {tutor.displayName}
-              </h3>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {tutor.tutorSubjects.map(({ subject }) => (
-                  <Badge key={subject.id} variant="secondary">
-                    {subject.subjectName}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+              {/* Tutor Information Section */}
+              <div className="flex-1 space-y-4 overflow-hidden">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                  {/* Name and Subjects */}
+                  <div>
+                    <h3 className="text-xl font-semibold truncate">
+                      {tutor.displayName}
+                    </h3>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {tutor.tutorSubjects.map(({ subject }) => (
+                        <Badge key={subject.id} variant="secondary">
+                          {subject.subjectName}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
 
-            {/* Pricing and Reviews */}
-            <div className="text-right shrink-0">
-              <div className="text-2xl font-bold text-[#4B2E83]">
-                ${Number(tutor.hourlyRate).toFixed(2)}/hr
-              </div>
-              {tutor.reviews && (
-                <div className="text-sm text-gray-500">
-                  ⭐ {tutor.reviews} reviews
+                  {/* Pricing and Reviews */}
+                  <div className="text-right shrink-0">
+                    <div className="text-2xl font-bold text-[#4B2E83]">
+                      ${Number(tutor.hourlyRate).toFixed(2)}/hr
+                    </div>
+                    {tutor.reviews && (
+                      <div className="text-sm text-gray-500">
+                        ⭐ {tutor.reviews} reviews
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
 
-          {/* Bio Section */}
-          <p className="mt-4 text-gray-600 line-clamp-3 break-all">
-            {tutor.bio}
-          </p>
+                {/* Bio Section */}
+                <p className="mt-4 text-gray-600 line-clamp-3 break-all">
+                  {tutor.bio}
+                </p>
 
-          {/* Footer Section */}
-          <div className="flex flex-col md:flex-row md:items-center justify-end gap-4 mt-4">
-            <div className="text-sm text-gray-500">
-              Experience: {tutor.experience || "Not specified"}
+                {/* Footer Section */}
+                <div className="flex flex-col md:flex-row md:items-center justify-end gap-4 mt-4">
+                  <div className="text-sm text-gray-500">
+                    Experience: {tutor.experience || "Not specified"}
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={handleSendMessage}
+                      className="bg-[#4B2E83] text-white px-4 py-2 rounded-md font-semibold 
+                      hover:bg-[#3b2566] transition-colors shrink-0"
+                    >
+                      Send Message
+                    </button>
+                    <button
+                      onClick={handleViewInfo}
+                      className="bg-slate-100 text-[#4B2E83] px-4 py-2 rounded-md font-semibold 
+                      hover:bg-slate-200 transition-colors shrink-0"
+                    >
+                      View Info
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={handleSendMessage}
-                className="bg-[#4B2E83] text-white px-4 py-2 rounded-md font-semibold 
-                hover:bg-[#3b2566] transition-colors shrink-0"
-              >
-                Send Message
-              </button>
-              <button
-                onClick={handleViewInfo}
-                className="bg-slate-100 text-[#4B2E83] px-4 py-2 rounded-md font-semibold 
-                hover:bg-slate-200 transition-colors shrink-0"
-              >
-                View Info
-              </button>
-            </div>
+          </Card>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="bg-white rounded-lg shadow-lg p-6"
+        >
+          <div className="flex items-center gap-4 mb-4">
+            <button
+              onClick={handleBack}
+              className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h2 className="text-xl font-semibold">
+              Message {tutor.displayName}
+            </h2>
           </div>
-        </div>
-      </div>
-    </Card>
+          <SendMessage recipientId={tutor.id} tutorPostId={tutor.id} />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
