@@ -138,7 +138,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
         </Avatar>
 
         {/* Tutor Information Section */}
-        <div className="flex-1 space-y-4">
+        <div className="flex-1 space-y-4 overflow-hidden">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             {/* Name and Subjects */}
             <div>
@@ -168,7 +168,9 @@ export function TutorCard({ tutor }: TutorCardProps) {
           </div>
 
           {/* Bio Section */}
-          <p className="mt-4 text-gray-600 line-clamp-3">{tutor.bio}</p>
+          <p className="mt-4 text-gray-600 line-clamp-3 break-all">
+            {tutor.bio}
+          </p>
 
           {/* Footer Section */}
           <div className="flex flex-col md:flex-row md:items-center justify-end gap-4 mt-4">
