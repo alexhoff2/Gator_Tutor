@@ -60,6 +60,7 @@ brew services start mysql
 
 # On Ubuntu
 sudo service mysql start
+![image](https://github.com/user-attachments/assets/aa863003-75fc-407d-9ad1-86b6d14c086f)
 
 # 5. Create a database
 mysql -u root -p
@@ -127,8 +128,7 @@ node index.js
 
 ## 📚 Documentation
 
-_(Documentation section is currently empty)_
-
+![image](https://github.com/user-attachments/assets/9d2f51cd-01ba-4466-b486-a7b034c68864)
 
 ## 📜 License
 
