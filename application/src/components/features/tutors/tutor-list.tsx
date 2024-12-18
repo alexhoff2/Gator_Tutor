@@ -3,6 +3,7 @@
 import { useTutorPosts } from "@/lib/hooks/useTutorPosts";
 import { TutorCard } from "@/components/features/tutors/tutor-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 
 /**
  * Tutor List Component
@@ -29,9 +30,9 @@ export function TutorList() {
    */
   if (loading) {
     return (
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <Skeleton key={i} className="w-full h-48 rounded-lg" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, i) => (
+          <Skeleton key={i} className="w-full aspect-[3/4] rounded-lg" />
         ))}
       </div>
     );
@@ -74,16 +75,28 @@ export function TutorList() {
    * TODO: Add a "sort by" dropdown to the top of the list (in a new component probably)
    */
   return (
-    <div className="space-y-4 w-full max-w-7xl mx-auto">
-      <div className="text-sm text-white">
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="text-sm text-white mb-6">
         Found {posts.length} {posts.length === 1 ? "result" : "results"}
       </div>
 
-      <div className="grid grid-cols-1 gap-2 md:gap-4">
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        layout
+        transition={{ duration: 0.3 }}
+      >
         {posts.map((tutor) => (
-          <TutorCard key={tutor.id} tutor={tutor} />
+          <motion.div
+            key={tutor.id}
+            layout
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <TutorCard tutor={tutor} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -73,7 +73,7 @@ export function FilterPanel() {
   };
 
   return (
-    <Card className="p-6 sticky top-4 bg-white/95 backdrop-blur-sm">
+    <Card className="p-6 md:sticky md:top-4 bg-white/95 backdrop-blur-sm">
       <h2 className="mb-6 text-lg font-semibold">Filters</h2>
 
       <div className="space-y-8">
