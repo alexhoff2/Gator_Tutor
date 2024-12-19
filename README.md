@@ -2,7 +2,6 @@
 
 # 📚 Table of Contents
 1. 📖 [About](#about)
-2. 🛠️ [How to Build](#how-to-build)
 3. 👥 [Team Workflow](#team-workflow)
 4. 📚 [Documentation](#documentation)
 5. 📜 [License](#license)
@@ -19,68 +18,12 @@
 #### Team Members:
 - **Alex Hoff (Team Lead):** Leading the team and organizing project milestones.
 - **Austin Ng (Backend Lead):** Responsible for server-side logic and database management.
-- **Jack Richards (Programming Lead):** Overlooking structures and code inside of the Project.
-- **Dylan Faulder (GitHub Master):** Organizing and maintaining GitHub repository, overseeing version control.
+- **Jack Richards (GitHub Master):** Overlooking structures and code inside of the Project.
+- **Dylan Faulder (Software Engineer):** Organizing and maintaining GitHub repository, overseeing version control.
 - **Dalan Choy (Front End Lead):** Desinging and overlooking the front end.
 
 #### Project Overview:
 We are working on a web-based application that facilitates tutoring services at SFSU, designed exclusively for students, faculty, and staff. Our mission is to create a simple, secure, and user-friendly platform that helps students find and connect with tutors on campus.
-
-
-## 🛠️ How to Build
-
-Here are the instructions to set up the environment and run the application.
-
-```bash
-# 1. Clone the repository from GitHub
-git clone https://github.com/CSC-648-SFSU/csc648-fa24-03-team06.git
-cd csc648-fa24-03-team06/application
-
-# 2. Install Node.js dependencies
-npm install
-
-# 3. Install MySQL (macOS/Ubuntu)
-# On macOS with Homebrew
-brew install mysql
-
-# On Ubuntu
-sudo apt-get install mysql-server
-
-# 4. Start the MySQL service
-# On macOS with Homebrew
-brew services start mysql
-
-# On Windows:
-    Download MySQL: Go to MySQL Downloads and download the MySQL Installer for Windows.
-    Install MySQL:
-        Choose Server Only during installation.
-        When configuring, use the default settings (leave the port as 3306).
-        Set up a root password and remember it (youll need it later).
-    Start MySQL Server: After installation, you can start the MySQL server from the MySQL Workbench or MySQL Command Line Client.
-
-# On Ubuntu
-sudo service mysql start
-![image](https://github.com/user-attachments/assets/aa863003-75fc-407d-9ad1-86b6d14c086f)
-
-# 5. Create a database
-mysql -u root -p
-CREATE DATABASE your_database_name;
-
-# 6. Configure database connection in .env file (create if it doesn’t exist)
-echo "DB_HOST=localhost" >> .env
-echo "DB_USER=root" >> .env
-echo "DB_PASSWORD=your_password" >> .env
-echo "DB_NAME=your_database_name" >> .env
-
-# 7. Run migrations (if applicable)
-npx sequelize-cli db:migrate
-
-# 8. Start the server
-node index.js
-
-# Visit the application at http://localhost:3000
-```
-
 
 ## 👥 Team Workflow
 
