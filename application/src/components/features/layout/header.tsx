@@ -314,8 +314,8 @@ export function Header() {
     <>
       <header className="bg-gray-800 text-white text-center py-2">
         <p className="text-sm font-semibold">
-          SFSU Software Engineering Project CSC 648-848, Fall 2024. For
-          Demonstration Only.
+          San Francisco State University Software Engineering Project CSC
+          648-848, Fall 2024. For Demonstration Only.
         </p>
       </header>
 
