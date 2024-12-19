@@ -18,8 +18,8 @@
 #### Team Members:
 - **Alex Hoff (Team Lead):** Leading the team and organizing project milestones.
 - **Austin Ng (Backend Lead):** Responsible for server-side logic and database management.
-- **Jack Richards (Programming Lead):** Overlooking structures and code inside of the Project.
-- **Dylan Faulder (GitHub Master):** Organizing and maintaining GitHub repository, overseeing version control.
+- **Jack Richards (GitHub Master):** Overlooking structures and code inside of the Project.
+- **Dylan Faulder (Software Engineer):** Organizing and maintaining GitHub repository, overseeing version control.
 - **Dalan Choy (Front End Lead):** Desinging and overlooking the front end.
 
 #### Project Overview:
