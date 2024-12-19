@@ -55,6 +55,7 @@ model Subject {
 model TutorPost {
   id            Int            @id @default(autoincrement())
   userId        Int            @unique @map("user_id")
+  title         String         @db.VarChar(255)
   displayName   String         @map("display_name") @db.VarChar(255)
   bio           String         @db.Text
   availability  Json

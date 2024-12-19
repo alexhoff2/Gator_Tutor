@@ -71,8 +71,7 @@ We are working on a web-based application that facilitates tutoring services at 
 
 ## 📚 Documentation
 
-_(Documentation section is currently empty)_
-
+![image](https://github.com/user-attachments/assets/9d2f51cd-01ba-4466-b486-a7b034c68864)
 
 ## 📜 License
 

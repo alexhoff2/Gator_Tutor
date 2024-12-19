@@ -15,6 +15,7 @@ export interface TutorPost {
   // Core post data
   id: number;
   userId: number;
+  title: string;
   displayName: string;
   bio: string;
   hourlyRate: number;

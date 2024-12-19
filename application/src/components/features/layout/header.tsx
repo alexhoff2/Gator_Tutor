@@ -311,94 +311,103 @@ export function Header() {
   );
 
   return (
-    <header className="bg-[#4B2E83] text-white shadow-md relative z-40">
-      <div className="container flex items-center justify-between px-6 py-3 mx-auto max-w-[1400px]">
-        <Link href="/" className="flex items-center space-x-3 shrink-0">
-          <Image
-            src="/images/logoIcon.png"
-            alt="GatorTutor Logo"
-            width={44}
-            height={44}
-            priority
-          />
-          <div className="flex flex-col max-lg:hidden">
-            <span className="text-2xl font-bold text-[#FFC726]">
-              GatorTutor
-            </span>
-            <span className="text-xs leading-tight">CSC648-848 Team 6</span>
-          </div>
-        </Link>
+    <>
+      <header className="bg-gray-800 text-white text-center py-2">
+        <p className="text-sm font-semibold">
+          San Francisco State University Software Engineering Project CSC
+          648-848, Fall 2024. For Demonstration Only.
+        </p>
+      </header>
 
-        <form
-          onSubmit={handleSearchSubmit}
-          className="flex items-center mx-8 transition-all duration-300 bg-white rounded-full max-w-3xl flex-1"
-        >
-          <Select value={currentSubject} onValueChange={handleSubjectChange}>
-            <SelectTrigger className="w-fit bg-white text-[#4B2E83] h-10 px-4 font-bold rounded-l-full border-none focus:ring-0 focus:ring-offset-0">
-              <SelectValue placeholder="All Subjects" />
-            </SelectTrigger>
-            <SelectContent
-              className="bg-white text-[#4B2E83]"
-              align="start"
-              position="popper"
-              sideOffset={5}
-              avoidCollisions
-            >
-              <SelectItem value="all" className="font-bold whitespace-nowrap">
-                All Subjects
-              </SelectItem>
-              {activeSubjects?.map((subject) => (
-                <SelectItem
-                  key={subject.id}
-                  value={subject.subjectName}
-                  className="flex items-center justify-between whitespace-nowrap"
-                >
-                  <span>{subject.subjectName}</span>
-                  <span className="ml-2 text-sm text-gray-500">
-                    ({subject.tutorCount})
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <div className="relative flex-1">
-            <input
-              type="text"
-              defaultValue={currentSearch}
-              onChange={handleSearchChange}
-              placeholder="Search tutors, subjects, or keywords..."
-              maxLength={40}
-              className="w-full h-10 px-4 text-[#4B2E83] focus:outline-none"
+      <header className="bg-[#4B2E83] text-white shadow-md relative z-40">
+        <div className="container flex items-center justify-between px-6 py-3 mx-auto max-w-[1400px]">
+          <Link href="/" className="flex items-center space-x-3 shrink-0">
+            <Image
+              src="/images/logoIcon.png"
+              alt="GatorTutor Logo"
+              width={44}
+              height={44}
+              priority
             />
-            {isPending && (
-              <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-r-transparent" />
-              </div>
-            )}
-          </div>
+            <div className="flex flex-col max-lg:hidden">
+              <span className="text-2xl font-bold text-[#FFC726]">
+                GatorTutor
+              </span>
+              <span className="text-xs leading-tight">CSC648-848 Team 6</span>
+            </div>
+          </Link>
 
-          <button
-            type="submit"
-            className="bg-[#FFC726] h-10 px-4 rounded-r-full flex items-center justify-center"
+          <form
+            onSubmit={handleSearchSubmit}
+            className="flex items-center mx-8 transition-all duration-300 bg-white rounded-full max-w-3xl flex-1"
           >
-            <svg
-              className="w-5 h-5 text-[#4B2E83]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
+            <Select value={currentSubject} onValueChange={handleSubjectChange}>
+              <SelectTrigger className="w-fit bg-white text-[#4B2E83] h-10 px-4 font-bold rounded-l-full border-none focus:ring-0 focus:ring-offset-0">
+                <SelectValue placeholder="All Subjects" />
+              </SelectTrigger>
+              <SelectContent
+                className="bg-white text-[#4B2E83]"
+                align="start"
+                position="popper"
+                sideOffset={5}
+                avoidCollisions
+              >
+                <SelectItem value="all" className="font-bold whitespace-nowrap">
+                  All Subjects
+                </SelectItem>
+                {activeSubjects?.map((subject) => (
+                  <SelectItem
+                    key={subject.id}
+                    value={subject.subjectName}
+                    className="flex items-center justify-between whitespace-nowrap"
+                  >
+                    <span>{subject.subjectName}</span>
+                    <span className="ml-2 text-sm text-gray-500">
+                      ({subject.tutorCount})
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <div className="relative flex-1">
+              <input
+                type="text"
+                defaultValue={currentSearch}
+                onChange={handleSearchChange}
+                placeholder="Search tutors, subjects, or keywords..."
+                maxLength={40}
+                className="w-full h-10 px-4 text-[#4B2E83] focus:outline-none"
+              />
+              {isPending && (
+                <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-r-transparent" />
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="bg-[#FFC726] h-10 px-4 rounded-r-full flex items-center justify-center"
             >
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-          </button>
-        </form>
+              <svg
+                className="w-5 h-5 text-[#4B2E83]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+              </svg>
+            </button>
+          </form>
 
-        {renderNavigation()}
+          {renderNavigation()}
 
-        {renderMobileMenu()}
-      </div>
-    </header>
+          {renderMobileMenu()}
+        </div>
+      </header>
+    </>
   );
 }
