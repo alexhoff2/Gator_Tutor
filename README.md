@@ -75,8 +75,7 @@ We are working on a web-based application that facilitates tutoring services at 
 
 ## 📜 License
 
-_(License section is currently empty)_
-
+MIT License
 
 ## 🤝 Contributions
 
